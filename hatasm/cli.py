@@ -101,7 +101,7 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
                             f.write('start:\n')
 
                             for line in result:
-                                f.write(f'    {line.mnemonic} {line.op_str}')
+                                f.write(f'    {line.mnemonic} {line.op_str}\n')
                     else:
                         for line in result:
                             print("0x%x: %s %s" % (line.address, line.mnemonic, line.op_str))
