@@ -84,7 +84,7 @@ class HatAsmCLI(Assembler, Disassembler):
                     print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
                     return
 
-                if self.args.assembler
+                if self.args.assembler:
                     for line in self.hexdump(result):
                         print(line)
 
