@@ -61,6 +61,7 @@ class HatAsmCLI(Assembler, Disassembler):
 
             while True:
                 try:
+                    errors, result, lines = {}, b'', 0
                     code = input('hatasm > ')
 
                     if not code:
@@ -71,9 +72,6 @@ class HatAsmCLI(Assembler, Disassembler):
 
                     if self.args.assembler:
                         if code.endswith(':'):
-                            result = b''
-                            lines = 0
-
                             while True:
                                 lines += 1
                                 line = input('........     ')
