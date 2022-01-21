@@ -28,7 +28,7 @@ import keystone
 
 
 class Assembler:
-    architectures = {
+    assembler_architectures = {
         'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
         'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
 
@@ -46,8 +46,8 @@ class Assembler:
     }
 
     def assemble_code(self, arch, code, mode=None):
-        if arch in self.architectures:
-            target = self.architectures[arch]
+        if arch in self.assembler_architectures:
+            target = self.assembler_architectures[arch]
 
             if arch == 'armle' and mode == 'thumb':
                 target[1] = keystone.KS_MODE_THUMB + keystone.KS_MODE_LITTLE_ENDIAN
