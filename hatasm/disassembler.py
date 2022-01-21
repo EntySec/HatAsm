@@ -58,7 +58,7 @@ class Disassembler:
             assembly = []
 
             for i in cs.disasm(code, 0x0):
-                assembly += "0x%x: %s %s" %(i.address, i.mnemonic, i.op_str)
+                assembly.append("0x%x: %s %s" %(i.address, i.mnemonic, i.op_str))
 
             return assembly
         return []
