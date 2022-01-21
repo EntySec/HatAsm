@@ -48,6 +48,15 @@ class HatAsmCLI(Assembler, Disassembler):
 
     def start(self):
         if (self.args.assembler or self.args.disassembler) and self.args.arch:
+            if self.args.assembler:
+                if self.args.arch not in self.assembler_architectures:
+                    print(f"hatasm: assembler failed: unsupported architecture")
+                    return
+            else:
+                if self.args.arch not in self.disassembler_architectures:
+                    print(f"hatasm: disassembler failed: unsupported architecture")
+                    return
+
             readline.parse_and_bind('tab: complete')
 
             while True:
@@ -78,6 +87,7 @@ class HatAsmCLI(Assembler, Disassembler):
                 if self.args.assembler
                     for line in self.hexdump(result):
                         print(line)
+
                 else:
                     for line in result:
                         print(line)
