@@ -24,19 +24,13 @@
 # SOFTWARE.
 #
 
-from .generator import Generator
+from .assembler import Assembler
+from .disassebler import Disassembler
 
 
-class HatVenom(Generator):
-    def convert_host(self, host, endian='little'):
-        return self.host_to_bytes(host, endian)
+class HatVenom(Assembler, Disassembler):
+    def assemble(self, arch, code, mode=None):
+        return self.assemble_code(arch, code, mode)
 
-    def convert_port(self, port, endian='little'):
-        return self.port_to_bytes(port, endian)
-
-    def generate(self, file_format, arch, shellcode, offsets={}):
-        return self.generate_payload(file_format, arch, shellcode, offsets)
-
-    def generate_to(self, file_format, arch, shellcode, offsets={}, filename='a.out'):
-        with open(filename, 'wb') as f:
-            f.write(self.generate_payload(file_format, arch, shellcode, offsets))
+    def disassemble(self, arch, code, mode=None):
+        return self.disassemble_code(arch, code, mode)
