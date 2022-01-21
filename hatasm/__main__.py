@@ -28,7 +28,7 @@ from .assembler import Assembler
 from .disassembler import Disassembler
 
 
-class HatVenom(Assembler, Disassembler):
+class HatAsm(Assembler, Disassembler):
     def assemble(self, arch, code, mode=None):
         return self.assemble_code(arch, code, mode)
 
