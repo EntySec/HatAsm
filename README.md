@@ -31,7 +31,7 @@ pip3 install git+https://github.com/EntySec/HatAsm
 There are all HatAsm basic functions that can be used to generate payload, covert data, assemble code or inject shellcode.
 
 * `assemble(arch, code, mode=None)` - Generate byte code for specified target from specified code (`mode` argument is used for `armle` and `armbe` to switch between `thumb` command set mode or `arm`).
-* `disassemble(arch, code, mode=None)` - 
+* `disassemble(arch, code, mode=None)` - Generate byte code for specified target from specified code (`mode` argument is used for `armle` and `armbe` to switch between `thumb` command set mode or `arm`).
 
 ## Assembling code
 
