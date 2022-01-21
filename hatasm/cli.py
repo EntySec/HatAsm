@@ -66,31 +66,40 @@ class HatAsmCLI(Assembler, Disassembler):
                     if not code:
                         continue
 
-                    if code == 'exit':
+                    if code in ['exit', 'quit']:
                         break
 
                     if self.args.assembler:
                         if code.endswith(':'):
-                            code = code
+                            result = b''
+                            lines = 0
 
                             while True:
+                                lines += 1
                                 line = input('........     ')
 
                                 if not line:
                                     break
 
-                                code += line + ';'
+                                try:
+                                    result += self.assemble_code(self.args.arch, line, self.args.mode)
+                                except (KeyboardInterrupt, EOFError):
+                                    print()
+
+                                except Exception as e:
+                                    errors.update({lines: str(e).split(' (')[0]})
+                        else:
+                            result = self.assemble_code(self.args.arch, code, self.args.mode)
                     else:
-                        code = codecs.escape_decode(code)[0]
+                        result = self.disassemble_code(self.args.arch, codecs.escape_decode(code)[0], self.args.mode)
 
                     if self.args.assembler:
-                        result = self.assemble_code(self.args.arch, code, self.args.mode)
-                    else:
-                        result = self.disassemble_code(self.args.arch, code, self.args.mode)
-
-                    if self.args.assembler:
-                        for line in self.hexdump(result):
-                            print(line)
+                        if not errors:
+                            for line in self.hexdump(result):
+                                print(line)
+                        else:
+                            for line in errors:
+                                print(f"hatasm: line {str(line)}: {errors[line]}")
 
                     else:
                         for line in result:
@@ -100,7 +109,7 @@ class HatAsmCLI(Assembler, Disassembler):
                     print()
 
                 except Exception as e:
-                    print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
+                    print(f"hatasm: line 1: {str(e).split(' (')[0]}")
                     continue
         else:
             self.parser.print_help()
