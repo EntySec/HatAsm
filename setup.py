@@ -26,10 +26,10 @@
 
 from setuptools import setup, find_packages
 
-setup(name='hatvenom',
-      version='2.0.0',
-      description='HatVenom is a HatSploit native powerful payload generation tool that provides support for all common platforms and architectures.',
-      url='http://github.com/EntySec/HatVenom',
+setup(name='hatasm',
+      version='1.0.0',
+      description='HatAsm is a HatSploit native powerful assembler and disassembler that provides support for all common architectures.',
+      url='http://github.com/EntySec/HatAsm',
       author='EntySec',
       author_email='entysec@gmail.com',
       license='MIT',
@@ -38,10 +38,11 @@ setup(name='hatvenom',
       include_package_data=True,
       entry_points={
           "console_scripts": [
-                "hatvenom = hatvenom.cli:main"
+                "hatasm = hatasm.cli:main"
           ]
       },
       install_requires=[
+          'capstone',
           'keystone-engine'
       ],
       zip_safe=False
