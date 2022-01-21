@@ -32,6 +32,9 @@ class Assembler:
         'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
         'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
 
+        'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32],
+        'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
+
         'aarch64': [keystone.KS_ARCH_ARM64, 0],
         'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
         'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
