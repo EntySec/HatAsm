@@ -60,26 +60,28 @@ class HatAsmCLI(Assembler, Disassembler):
             readline.parse_and_bind('tab: complete')
 
             while True:
-                code = input('hatasm > ')
-
-                if self.args.assembler:
-                    if code.endswith(':'):
-                        code = code
-
-                        while True:
-                            if not code:
-                                break
-                            code += input('......... ')
-                else:
-                    code = codecs.escape_decode(code)[0]
-
                 try:
+                    code = input('hatasm > ')
+
+                    if self.args.assembler:
+                        if code.endswith(':'):
+                            code = code
+
+                            while True:
+                                if not code:
+                                    break
+                                code += input('......... ')
+                    else:
+                        code = codecs.escape_decode(code)[0]
+
                     if self.args.assembler:
                         result = self.assemble_code(self.args.arch, code, self.args.mode)
                     else:
                         result = self.disassemble_code(self.args.arch, code, self.args.mode)
+
                 except (KeyboardInterrupt, EOFError):
                     continue
+
                 except Exception as e:
                     print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
                     continue
