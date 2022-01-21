@@ -61,7 +61,7 @@ class HatAsmCLI(Assembler, Disassembler):
 
             while True:
                 try:
-                    errors, result, lines = {}, b'', 0
+                    errors, result, lines = {}, b'', 1
                     code = input('hatasm > ')
 
                     if not code:
