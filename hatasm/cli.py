@@ -30,11 +30,12 @@ import readline
 import sys
 import argparse
 
+from .badges import Badges
 from .assembler import Assembler
 from .disassembler import Disassembler
 
 
-class HatAsmCLI(Assembler, Disassembler):
+class HatAsmCLI(Assembler, Disassembler, Badges):
     description = (
         "HatAsm is a HatSploit native powerful assembler and disassembler"
         " that provides support for all common architectures."
@@ -42,6 +43,8 @@ class HatAsmCLI(Assembler, Disassembler):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--arch', dest='arch', help='Architecture to assemble or disassemble for.')
     parser.add_argument('--mode', dest='mode', help='Architecture mode (used for armle or armbe - arm/thumb).')
+    parser.add_argument('-i', '--input', dest='input', help='Input file for assembler or disassembler.')
+    parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
     parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
     parser.add_argument('-d', '--disassembler', action='store_true', dest='disassembler', help='Launch HatAsm disassembler.')
     args = parser.parse_args()
@@ -50,65 +53,110 @@ class HatAsmCLI(Assembler, Disassembler):
         if (self.args.assembler or self.args.disassembler) and self.args.arch:
             if self.args.assembler:
                 if self.args.arch not in self.assembler_architectures:
-                    print(f"hatasm: assembler failed: unsupported architecture")
+                    self.print_error(f"HatAsm: assembler failed: unsupported architecture")
                     return
             else:
                 if self.args.arch not in self.disassembler_architectures:
-                    print(f"hatasm: disassembler failed: unsupported architecture")
+                    self.print_error(f"HatAsm: disassembler failed: unsupported architecture")
                     return
 
-            readline.parse_and_bind('tab: complete')
+            if self.args.input:
+                if not os.path.exists(self.args.input):
+                    self.print_error(f"Input file: {self.args.input}: does not exist!")
+                    return
 
-            while True:
-                try:
-                    errors, result, lines = {}, b'', 1
-                    code = input('hatasm > ')
+                errors, result, lines = {}, b'', 1
 
-                    if not code:
-                        continue
+                if self.args.assembler:
+                    with open(self.args.input, 'r') as f:
+                        f_lines = f.read().strip().split('\n')
 
-                    if code in ['exit', 'quit']:
-                        break
+                        for line in f_lines:
+                            try:
+                                result += self.assemble_code(self.args.arch, line, self.args.mode)
+                            except Exception as e:
+                                errors.update({lines: str(e).split(' (')[0]})
 
-                    if self.args.assembler:
-                        if code.endswith(':'):
-                            while True:
-                                lines += 1
-                                line = input('........     ')
+                            lines += 1
 
-                                if not line:
-                                    break
-
-                                try:
-                                    result += self.assemble_code(self.args.arch, line, self.args.mode)
-                                except (KeyboardInterrupt, EOFError):
-                                    print()
-
-                                except Exception as e:
-                                    errors.update({lines: str(e).split(' (')[0]})
+                    if not errors:
+                        if self.args.output:
+                            with open(self.args.output, 'wb') as f:
+                                f.write(result)
                         else:
-                            result = self.assemble_code(self.args.arch, code, self.args.mode)
-                    else:
-                        result = self.disassemble_code(self.args.arch, codecs.escape_decode(code)[0], self.args.mode)
-
-                    if self.args.assembler:
-                        if not errors:
                             for line in self.hexdump(result):
                                 print(line)
-                        else:
-                            for line in errors:
-                                print(f"hatasm: line {str(line)}: {errors[line]}")
+                    else:
+                        for line in errors:
+                            self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+                else:
+                    with open(self.args.input, 'rb') as f:
+                        line = codecs.escape_decode(f.read())[0]
+                        result = self.disassemble_code(self.args.arch, line, self.args.mode)
 
+                    if self.args.output:
+                        with open(self.args.output, 'w') as f:
+                            f.write('start:\n')
+
+                            for line in result:
+                                f.write(f'    {line.mnemonic} {line.op_str}')
                     else:
                         for line in result:
-                            print(line)
+                            print("0x%x: %s %s" % (line.address, line.mnemonic, line.op_str))
+            else:
+                readline.parse_and_bind('tab: complete')
 
-                except (KeyboardInterrupt, EOFError):
-                    print()
+                while True:
+                    try:
+                        errors, result, lines = {}, b'', 1
+                        code = input('hatasm > ')
 
-                except Exception as e:
-                    print(f"hatasm: line 1: {str(e).split(' (')[0]}")
-                    continue
+                        if not code:
+                            continue
+
+                        if code in ['exit', 'quit']:
+                            break
+
+                        if self.args.assembler:
+                            if code.endswith(':'):
+                                while True:
+                                    lines += 1
+                                    line = input('........     ')
+
+                                    if not line:
+                                        break
+
+                                    try:
+                                        result += self.assemble_code(self.args.arch, line, self.args.mode)
+                                    except (KeyboardInterrupt, EOFError):
+                                        print()
+
+                                    except Exception as e:
+                                        errors.update({lines: str(e).split(' (')[0]})
+                            else:
+                                result = self.assemble_code(self.args.arch, code, self.args.mode)
+                        else:
+                            line = codecs.escape_decode(code)[0]
+                            result = self.disassemble_code(self.args.arch, line, self.args.mode)
+
+                        if self.args.assembler:
+                            if not errors:
+                                for line in self.hexdump(result):
+                                    print(line)
+                            else:
+                                for line in errors:
+                                    self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+
+                        else:
+                            for line in result:
+                                print("0x%x: %s %s" % (line.address, line.mnemonic, line.op_str))
+
+                    except (KeyboardInterrupt, EOFError):
+                        print()
+
+                    except Exception as e:
+                        self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
+                        continue
         else:
             self.parser.print_help()
 
