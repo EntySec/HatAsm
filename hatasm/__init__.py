@@ -24,4 +24,4 @@
 # SOFTWARE.
 #
 
-from .__main__ import HatVenom
+from .__main__ import HatAsm
