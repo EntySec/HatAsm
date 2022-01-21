@@ -32,6 +32,7 @@ There are all HatAsm basic functions that can be used to generate payload, cover
 
 * `assemble(arch, code, mode=None)` - Generate byte code for specified target from specified code (`mode` argument is used for `armle` and `armbe` to switch between `thumb` command set mode or `arm`).
 * `disassemble(arch, code, mode=None)` - Generate byte code for specified target from specified code (`mode` argument is used for `armle` and `armbe` to switch between `thumb` command set mode or `arm`).
+* `hexdump(code, length=16, sep='.')` - Hexdump for byte code.
 
 ## Assembling code
 
