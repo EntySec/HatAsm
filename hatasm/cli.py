@@ -79,7 +79,7 @@ class HatAsmCLI(Assembler, Disassembler):
                                 if not line:
                                     break
 
-                                code += line
+                                code += line + ';'
                     else:
                         code = codecs.escape_decode(code)[0]
 
