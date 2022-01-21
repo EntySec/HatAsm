@@ -91,7 +91,7 @@ class HatAsmCLI(Assembler, Disassembler):
                             print(line)
 
                 except (KeyboardInterrupt, EOFError):
-                    continue
+                    print()
 
                 except Exception as e:
                     print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
