@@ -66,6 +66,9 @@ class HatAsmCLI(Assembler, Disassembler):
                     if not code:
                         continue
 
+                    if code == 'exit':
+                        break
+
                     if self.args.assembler:
                         if code.endswith(':'):
                             code = code
