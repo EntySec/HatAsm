@@ -82,7 +82,7 @@ class HatAsmCLI(Assembler, Disassembler):
                     continue
                 except Exception as e:
                     print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
-                    return
+                    continue
 
                 if self.args.assembler:
                     for line in self.hexdump(result):
