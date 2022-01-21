@@ -75,9 +75,9 @@ class HatAsmCLI(Assembler, Disassembler):
 
                 try:
                     if self.args.assemble:
-                        result = self.assemble(self.args.arch, code, self.args.mode)
+                        result = self.assemble_code(self.args.arch, code, self.args.mode)
                     else:
-                        result = self.disassemble(self.args.arch, code, self.args.mode)
+                        result = self.disassemble_code(self.args.arch, code, self.args.mode)
                 except (KeyboardInterrupt, EOFError):
                     continue
                 except Exception as e:
