@@ -25,7 +25,7 @@
 #
 
 from .assembler import Assembler
-from .disassebler import Disassembler
+from .disassembler import Disassembler
 
 
 class HatVenom(Assembler, Disassembler):
