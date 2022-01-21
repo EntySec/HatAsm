@@ -74,7 +74,7 @@ class HatAsmCLI(Assembler, Disassembler):
                     code = codecs.escape_decode(code)[0]
 
                 try:
-                    if self.args.assemble:
+                    if self.args.assembler:
                         result = self.assemble_code(self.args.arch, code, self.args.mode)
                     else:
                         result = self.disassemble_code(self.args.arch, code, self.args.mode)
