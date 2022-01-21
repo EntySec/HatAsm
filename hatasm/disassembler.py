@@ -27,8 +27,8 @@
 import capstone
 
 
-class Assembler:
-    architectures = {
+class Disssembler:
+    disassembler_architectures = {
         'x86': [capstone.CS_ARCH_X86, capstone.CS_MODE_32],
         'x64': [capstone.CS_ARCH_X86, capstone.CS_MODE_64],
 
@@ -46,8 +46,8 @@ class Assembler:
     }
 
     def disassemble_code(self, arch, code, mode=None):
-        if arch in self.architectures:
-            target = self.architectures[arch]
+        if arch in self.disassembler_architectures:
+            target = self.disassembler_architectures[arch]
 
             if arch == 'armle' and mode == 'thumb':
                 target[1] = capstone.CS_MODE_THUMB + capstone.CS_MODE_LITTLE_ENDIAN
