@@ -57,7 +57,7 @@ class Disassembler:
             cs = capstone.Cs(*target)
             assembly = []
 
-            for i in cs.disasm(code, 0x1000):
+            for i in cs.disasm(code, 0x10000000):
                 assembly.append("0x%x: %s %s" %(i.address, i.mnemonic, i.op_str))
 
             return assembly
