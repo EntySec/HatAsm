@@ -63,6 +63,9 @@ class HatAsmCLI(Assembler, Disassembler):
                 try:
                     code = input('hatasm > ')
 
+                    if not code:
+                        continue
+
                     if self.args.assembler:
                         if code.endswith(':'):
                             code = code
