@@ -56,3 +56,41 @@ start:
 hatasm = HatAsm()
 shellcode = hatasm.assemble('x64', code)
 ```
+
+## HatAsm CLI
+
+HatAsm also has their own command line interface that can be invoked by executing `hatasm` command:
+
+```
+usage: hatasm [-h] [--arch ARCH] [--mode MODE] [-a] [-d]
+
+HatAsm is a HatSploit native powerful assembler and disassembler that provides support for all
+common architectures.
+
+optional arguments:
+  -h, --help          show this help message and exit
+  --arch ARCH         Architecture to assemble or disassemble for.
+  --mode MODE         Architecture mode (used for armle or armbe - arm/thumb).
+  -a, --assembler     Launch HatAsm assembler.
+  -d, --disassembler  Launch HatAsm disassembler.
+```
+
+### Examples
+
+```
+hatasm -a --arch x64
+```
+
+Run interactive assembler shell for `x64` architecture.
+
+```
+hatasm > nop
+00000000  90                                               |.               |
+hatasm > start:
+........     xor rax, rax
+........     cdq
+........     nop
+........     
+00000000  48 31 c0 99 90                                   |H1...           |
+hatasm >
+```
