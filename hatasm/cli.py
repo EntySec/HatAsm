@@ -79,20 +79,20 @@ class HatAsmCLI(Assembler, Disassembler):
                     else:
                         result = self.disassemble_code(self.args.arch, code, self.args.mode)
 
+                    if self.args.assembler:
+                        for line in self.hexdump(result):
+                            print(line)
+
+                    else:
+                        for line in result:
+                            print(line)
+
                 except (KeyboardInterrupt, EOFError):
                     continue
 
                 except Exception as e:
                     print(f"{'assembler' if self.args.assembler else 'disassembler'} failed: {str(e)}")
                     continue
-
-                if self.args.assembler:
-                    for line in self.hexdump(result):
-                        print(line)
-
-                else:
-                    for line in result:
-                        print(line)
         else:
             self.parser.print_help()
 
