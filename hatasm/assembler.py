@@ -61,7 +61,7 @@ class Assembler:
                 return bytes(machine[0])
         return b''
 
-    def hexdump(self, code, length=16):
+    def hexdump(self, code, length=16, sep='.'):
         src = code
         filt = ''.join([(len(repr(chr(x))) == 3) and chr(x) or sep for x in range(256)])
         lines = []
