@@ -24,6 +24,8 @@
 # SOFTWARE.
 #
 
+import os
+
 import codecs
 import readline
 
