@@ -32,14 +32,25 @@ class HatAsm(Assembler, Disassembler):
     def assemble(self, arch, code, mode=None):
         return self.assemble_code(arch, code, mode)
 
+    def assemble_to(self, arch, code, mode=None, filename='a.bin'):
+        with open(filename, 'wb') as f:
+            f.write(self.assemble_code(arch, code, mode))
+
+    def assembler_cli(self, arch, mode=None):
+        self.assemble_cli(arch, mode)
+
     def disassemble(self, arch, code, mode=None):
         return self.disassemble_code(arch, code, mode)
 
-    def assembler_cli(self, arch, mode=None):
-        self.interact_assembler(arch, mode)
+    def disassemble_to(self, arch, code, mode=None, filename='a.asm'):
+        code = self.disassemble_code(arch, code, mode)
+
+        with open(filename, 'w') as f:
+            f.write("start:\n")
+            f.write(f"    {code['mnemonic']} {code['operand']}\n")
 
     def disassembler_cli(self, arch, mode=None):
-        self.interact_disassembler(arch, mode)
+        self.disassemble_cli(arch, mode)
 
     def hexdump(self, code, length=16, sep='.'):
         return self.hexdump(code, length, sep)
