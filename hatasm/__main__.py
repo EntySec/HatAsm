@@ -35,5 +35,11 @@ class HatAsm(Assembler, Disassembler):
     def disassemble(self, arch, code, mode=None):
         return self.disassemble_code(arch, code, mode)
 
+    def assembler_cli(self, arch, mode=None):
+        self.interact_assembler(arch, mode)
+
+    def disassembler_cli(self, arch, mode=None):
+        self.interact_disassembler(arch, mode)
+
     def hexdump(self, code, length=16, sep='.'):
         return self.hexdump(code, length, sep)
