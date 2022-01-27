@@ -34,14 +34,12 @@ There are all HatAsm basic functions that can be used to generate payload, cover
 
 * `assemble(arch, code, mode=None)` - Generate byte code for specified target from specified assembly code.
 * `assemble_to(arch, code, mode=None, filename='a.bin')` - Generate byte code for specified target from specified assembly code and save it in to the specified file.
-* `assemble_from(arch, filename, mode=None)` - Generate byte code for specified target from specified file.
 * `assembler_cli(arch, mode=None)` - Assembler CLI.
 
 ### Disassembler functions
 
 * `disassemble(arch, code, mode=None)` - Generate assembly code for specified target from specified byte code.
 * `disassemble_to(arch, code, mode=None, filename='a.asm')` - Generate assembly code for specified target from specified byte code and save it in to the specified file.
-* `disassemble_from(arch, filename, mode=None)` - Generate assembly code for specified target from specified file.
 * `disassembler_cli(arch, mode=None)` - Disassembler CLI.
 
 ### Misc functions
