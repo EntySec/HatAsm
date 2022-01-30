@@ -53,4 +53,4 @@ class HatAsm(Assembler, Disassembler):
         self.disassemble_cli(arch, mode)
 
     def hexdump(self, code, length=16, sep='.'):
-        return self.hexdump(code, length, sep)
+        return self.hexdump_code(code, length, sep)
