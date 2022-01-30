@@ -107,7 +107,7 @@ class Assembler(Badges):
         else:
             self.print_error(f"Local file: {filename}: does not exist!")
 
-    def assembler_cli(self, arch, mode=None):
+    def assemble_cli(self, arch, mode=None):
         readline.parse_and_bind('tab: complete')
 
         while True:
