@@ -24,10 +24,13 @@
 # SOFTWARE.
 #
 
+import readline
 import capstone
 
+from .badges import Badges
 
-class Disassembler:
+
+class Disassembler(Badges):
     disassembler_architectures = {
         'x86': [capstone.CS_ARCH_X86, capstone.CS_MODE_32],
         'x64': [capstone.CS_ARCH_X86, capstone.CS_MODE_64],
@@ -66,3 +69,30 @@ class Disassembler:
 
             return assembly
         return []
+
+    def disassemble_from(self, arch, filename, mode=None):
+        with open(filename, 'rb') as f:
+            code = codecs.escape_decode(f.read())[0]
+            result = self.disassemble_code(arch, code, mode)
+
+            for line in result:
+                self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
+
+    def disassemble_cli(self, arch, mode=None):
+        readline.parse_and_bind('tab: complete')
+
+        while True:
+            try:
+                code = input('hatasm > ')
+
+                if not code:
+                    continue
+
+                if code in ['exit', 'quit']:
+                    break
+
+                code = codecs.escape_decode(code)[0]
+                result = self.disassemble_code(arch, code, mode)
+
+                for line in result:
+                    self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
