@@ -24,11 +24,6 @@
 # SOFTWARE.
 #
 
-import os
-
-import codecs
-import readline
-
 import sys
 import argparse
 
@@ -63,102 +58,16 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
                     return
 
             if self.args.input:
-                if not os.path.exists(self.args.input):
-                    self.print_error(f"Input file: {self.args.input}: does not exist!")
-                    return
-
-                errors, result, lines = {}, b'', 1
-
                 if self.args.assembler:
-                    with open(self.args.input, 'r') as f:
-                        f_lines = f.read().strip().split('\n')
-
-                        for line in f_lines:
-                            try:
-                                result += self.assemble_code(self.args.arch, line, self.args.mode)
-                            except Exception as e:
-                                errors.update({lines: str(e).split(' (')[0]})
-
-                            lines += 1
-
-                    if not errors:
-                        if self.args.output:
-                            with open(self.args.output, 'wb') as f:
-                                f.write(result)
-                        else:
-                            for line in self.hexdump(result):
-                                print(line)
-                    else:
-                        for line in errors:
-                            self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+                    self.assemble_from(self.args.arch, self.args.input, self.args.mode)
                 else:
-                    with open(self.args.input, 'rb') as f:
-                        line = codecs.escape_decode(f.read())[0]
-                        result = self.disassemble_code(self.args.arch, line, self.args.mode)
+                    self.disassemble_from(self.arch, self.args.input, self.args.mode)
 
-                    if self.args.output:
-                        with open(self.args.output, 'w') as f:
-                            f.write('start:\n')
-
-                            for line in result:
-                                f.write(f'    {line.mnemonic} {line.op_str}\n')
-                    else:
-                        for line in result:
-                            print("0x%x: %s %s" % (line.address, line.mnemonic, line.op_str))
             else:
-                readline.parse_and_bind('tab: complete')
-
-                while True:
-                    try:
-                        errors, result, lines = {}, b'', 1
-                        code = input('hatasm > ')
-
-                        if not code:
-                            continue
-
-                        if code in ['exit', 'quit']:
-                            break
-
-                        if self.args.assembler:
-                            if code.endswith(':'):
-                                while True:
-                                    lines += 1
-                                    line = input('........     ')
-
-                                    if not line:
-                                        break
-
-                                    try:
-                                        result += self.assemble_code(self.args.arch, line, self.args.mode)
-                                    except (KeyboardInterrupt, EOFError):
-                                        print()
-
-                                    except Exception as e:
-                                        errors.update({lines: str(e).split(' (')[0]})
-                            else:
-                                result = self.assemble_code(self.args.arch, code, self.args.mode)
-                        else:
-                            line = codecs.escape_decode(code)[0]
-                            result = self.disassemble_code(self.args.arch, line, self.args.mode)
-
-                        if self.args.assembler:
-                            if not errors:
-                                for line in self.hexdump(result):
-                                    print(line)
-                            else:
-                                for line in errors:
-                                    self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
-
-                        else:
-                            for line in result:
-                                print("0x%x: %s %s" % (line.address, line.mnemonic, line.op_str))
-
-                    except (KeyboardInterrupt, EOFError):
-                        print()
-
-                    except Exception as e:
-                        self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
-                        continue
+                if self.args.assembler:
+                    self.assemble_cli(self.args.arch, self.args.mode)
+                else:
+                    self.disassemble_cli(self.args.arch, self.args.mode)
         else:
             self.parser.print_help()
 
