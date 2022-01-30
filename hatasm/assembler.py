@@ -72,7 +72,8 @@ class Assembler(Badges):
 
         for line in lines:
             try:
-                result += self.assemble_code(arch, line, mode)
+                if line:
+                    result += self.assemble_code(arch, line, mode)
             except Exception as e:
                 errors.update({count: str(e).split(' (')[0]})
 
