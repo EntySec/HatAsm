@@ -24,10 +24,13 @@
 # SOFTWARE.
 #
 
+import readline
 import keystone
 
+from .badges import Badges
 
-class Assembler:
+
+class Assembler(Badges):
     assembler_architectures = {
         'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
         'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
@@ -60,6 +63,93 @@ class Assembler:
             if machine:
                 return bytes(machine[0])
         return b''
+
+    def recursive_assemble(self, arch, lines, mode=None):
+        count = 1
+        errors = {}
+        result = b''
+
+        for line in lines:
+            count += 1
+
+            try:
+                result += self.assemble_code(arch, line, mode)
+            except Exception as e:
+                errors.update({count: str(e).split(' (')[0]})
+
+        return errors if errors else result
+
+    def assemble_from(self, arch, filename, mode=None):
+        with open(filename, 'r') as f:
+            code = f.read()
+
+            try:
+                result = self.assemble_code(arch, code, mode)
+
+                for line in self.hexdump(result):
+                    self.print_empty(line)
+
+            except (KeyboardInterrupt, EOFError):
+                self.print_empty()
+
+            except Exception:
+                errors = self.recursive_assemble(arch, code.split('\n'), mode)
+
+                if isinstance(errors, dict):
+                    for line in errors:
+                        self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+
+                else:
+                    for line in self.hexdump(errors):
+                        self.print_empty(line)
+
+    def assembler_cli(self, arch, mode=None):
+        readline.parse_and_bind('tab: complete')
+
+        while True:
+            try:
+                code = input('hatasm > ')
+
+                if not code:
+                    continue
+
+                if code in ['exit', 'quit']:
+                    break
+
+                if code.endswith(':'):
+                    while True:
+                        line = input('........ ')
+
+                        if not line:
+                            break
+
+                        code += line + '\n'
+
+                try:
+                    result = self.assemble_code(arch, code, mode)
+
+                    for line in self.hexdump(result):
+                        self.print_empty(line)
+
+                except (KeyboardInterrupt, EOFError):
+                    self.print_empty()
+
+                except Exception:
+                    errors = self.recursive_assemble(arch, code.split('\n'), mode)
+
+                    if isinstance(errors, dict):
+                        for line in errors:
+                            self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+
+                    else:
+                        for line in self.hexdump(errors):
+                            self.print_empty(line)
+
+            except (KeyboardInterrupt, EOFError):
+                self.print_empty()
+
+            except Exception as e:
+                self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
 
     def hexdump(self, code, length=16, sep='.'):
         src = code
