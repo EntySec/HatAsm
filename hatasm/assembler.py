@@ -88,7 +88,7 @@ class Assembler(Badges):
                 try:
                     result = self.assemble_code(arch, code, mode)
 
-                    for line in self.hexdump(result):
+                    for line in self.hexdump_code(result):
                         self.print_empty(line)
 
                 except (KeyboardInterrupt, EOFError):
@@ -102,7 +102,7 @@ class Assembler(Badges):
                             self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
 
                     else:
-                        for line in self.hexdump(errors):
+                        for line in self.hexdump_code(errors):
                             self.print_empty(line)
         else:
             self.print_error(f"Local file: {filename}: does not exist!")
@@ -132,7 +132,7 @@ class Assembler(Badges):
                 try:
                     result = self.assemble_code(arch, code, mode)
 
-                    for line in self.hexdump(result):
+                    for line in self.hexdump_code(result):
                         self.print_empty(line)
 
                 except (KeyboardInterrupt, EOFError):
@@ -146,7 +146,7 @@ class Assembler(Badges):
                             self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
 
                     else:
-                        for line in self.hexdump(errors):
+                        for line in self.hexdump_code(errors):
                             self.print_empty(line)
 
             except (KeyboardInterrupt, EOFError):
@@ -155,7 +155,7 @@ class Assembler(Badges):
             except Exception as e:
                 self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
 
-    def hexdump(self, code, length=16, sep='.'):
+    def hexdump_code(self, code, length=16, sep='.'):
         src = code
         filt = ''.join([(len(repr(chr(x))) == 3) and chr(x) or sep for x in range(256)])
         lines = []
