@@ -72,12 +72,15 @@ class Disassembler(Badges):
         return []
 
     def disassemble_from(self, arch, filename, mode=None):
-        with open(filename, 'rb') as f:
-            code = codecs.escape_decode(f.read())[0]
-            result = self.disassemble_code(arch, code, mode)
+        if os.path.exists(filename):
+            with open(filename, 'rb') as f:
+                code = codecs.escape_decode(f.read())[0]
+                result = self.disassemble_code(arch, code, mode)
 
-            for line in result:
-                self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
+                for line in result:
+                    self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
+        else:
+            self.print_error(f"Local file: {filename}: does not exist!")
 
     def disassemble_cli(self, arch, mode=None):
         readline.parse_and_bind('tab: complete')
