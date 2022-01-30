@@ -24,6 +24,7 @@
 # SOFTWARE.
 #
 
+import os
 import readline
 import keystone
 
@@ -80,28 +81,31 @@ class Assembler(Badges):
         return errors if errors else result
 
     def assemble_from(self, arch, filename, mode=None):
-        with open(filename, 'r') as f:
-            code = f.read()
+        if os.path.exists(filename):
+            with open(filename, 'r') as f:
+                code = f.read()
 
-            try:
-                result = self.assemble_code(arch, code, mode)
+                try:
+                    result = self.assemble_code(arch, code, mode)
 
-                for line in self.hexdump(result):
-                    self.print_empty(line)
-
-            except (KeyboardInterrupt, EOFError):
-                self.print_empty()
-
-            except Exception:
-                errors = self.recursive_assemble(arch, code.split('\n'), mode)
-
-                if isinstance(errors, dict):
-                    for line in errors:
-                        self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
-
-                else:
-                    for line in self.hexdump(errors):
+                    for line in self.hexdump(result):
                         self.print_empty(line)
+
+                except (KeyboardInterrupt, EOFError):
+                    self.print_empty()
+
+                except Exception:
+                    errors = self.recursive_assemble(arch, code.split('\n'), mode)
+
+                    if isinstance(errors, dict):
+                        for line in errors:
+                            self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
+
+                    else:
+                        for line in self.hexdump(errors):
+                            self.print_empty(line)
+        else:
+            self.print_error(f"Local file: {filename}: does not exist!")
 
     def assembler_cli(self, arch, mode=None):
         readline.parse_and_bind('tab: complete')
