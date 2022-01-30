@@ -71,13 +71,12 @@ class Assembler(Badges):
         result = b''
 
         for line in lines:
-            count += 1
-
             try:
                 result += self.assemble_code(arch, line, mode)
             except Exception as e:
                 errors.update({count: str(e).split(' (')[0]})
 
+            count += 1
         return errors if errors else result
 
     def assemble_from(self, arch, filename, mode=None):
