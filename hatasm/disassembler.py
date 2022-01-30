@@ -24,6 +24,7 @@
 # SOFTWARE.
 #
 
+import codecs
 import readline
 import capstone
 
