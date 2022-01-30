@@ -96,3 +96,6 @@ class Disassembler(Badges):
 
                 for line in result:
                     self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
+
+            except Exception:
+                self.print_empty()
