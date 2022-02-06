@@ -29,7 +29,7 @@ from setuptools import setup, find_packages
 setup(name='hatasm',
       version='1.0.0',
       description='HatAsm is a HatSploit native powerful assembler and disassembler that provides support for all common architectures.',
-      url='http://github.com/EntySec/HatAsm',
+      url='https://github.com/EntySec/HatAsm',
       author='EntySec',
       author_email='entysec@gmail.com',
       license='MIT',
