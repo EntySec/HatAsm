@@ -51,6 +51,11 @@ class Disassembler(Badges):
         'mipsbe': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_BIG_ENDIAN]
     }
 
+    disassembler_syntaxes = {
+        'intel': capstone.CS_OPT_SYNTAX_INTEL,
+        'att': capstone.CS_OPT_SYNTAX_ATT
+    }
+
     def disassemble_code(self, arch, code, mode=None):
         if arch in self.disassembler_architectures:
             target = self.disassembler_architectures[arch]
@@ -61,6 +66,9 @@ class Disassembler(Badges):
                 target[1] = capstone.CS_MODE_THUMB + capstone.CS_MODE_BIG_ENDIAN
 
             cs = capstone.Cs(*target)
+            if syntax in self.disassembler_syntaxes:
+                cs.syntax = self.disassembler_syntaxes[syntax]
+
             assembly = []
 
             for i in cs.disasm(code, 0x10000000):
