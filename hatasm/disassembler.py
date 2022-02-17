@@ -56,7 +56,7 @@ class Disassembler(Badges):
         'att': capstone.CS_OPT_SYNTAX_ATT
     }
 
-    def disassemble_code(self, arch, code, mode=None):
+    def disassemble_code(self, arch, code, mode=None, syntax='intel'):
         if arch in self.disassembler_architectures:
             target = self.disassembler_architectures[arch]
 
