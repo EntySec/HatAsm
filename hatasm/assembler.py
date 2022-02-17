@@ -73,7 +73,7 @@ class Assembler(Badges):
                 return bytes(machine[0])
         return b''
 
-    def recursive_assemble(self, arch, lines, mode=None):
+    def recursive_assemble(self, arch, lines, mode=None, syntax='intel'):
         count = 1
         errors = {}
         result = b''
@@ -81,20 +81,20 @@ class Assembler(Badges):
         for line in lines:
             try:
                 if line:
-                    result += self.assemble_code(arch, line, mode)
+                    result += self.assemble_code(arch, line, mode, syntax)
             except Exception as e:
                 errors.update({count: str(e).split(' (')[0]})
 
             count += 1
         return errors if errors else result
 
-    def assemble_from(self, arch, filename, mode=None):
+    def assemble_from(self, arch, filename, mode=None, syntax='intel'):
         if os.path.exists(filename):
             with open(filename, 'r') as f:
                 code = f.read()
 
                 try:
-                    result = self.assemble_code(arch, code, mode)
+                    result = self.assemble_code(arch, code, mode, syntax)
 
                     for line in self.hexdump_code(result):
                         self.print_empty(line)
@@ -115,7 +115,7 @@ class Assembler(Badges):
         else:
             self.print_error(f"Local file: {filename}: does not exist!")
 
-    def assemble_cli(self, arch, mode=None):
+    def assemble_cli(self, arch, mode=None, syntax='intel'):
         readline.parse_and_bind('tab: complete')
 
         while True:
@@ -138,7 +138,7 @@ class Assembler(Badges):
                         code += line + '\n'
 
                 try:
-                    result = self.assemble_code(arch, code, mode)
+                    result = self.assemble_code(arch, code, mode, syntax)
 
                     for line in self.hexdump_code(result):
                         self.print_empty(line)
@@ -147,7 +147,7 @@ class Assembler(Badges):
                     self.print_empty()
 
                 except Exception:
-                    errors = self.recursive_assemble(arch, code.split('\n'), mode)
+                    errors = self.recursive_assemble(arch, code.split('\n'), mode, syntax)
 
                     if isinstance(errors, dict):
                         for line in errors:
