@@ -49,7 +49,12 @@ class Assembler(Badges):
         'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
     }
 
-    def assemble_code(self, arch, code, mode=None):
+    assembler_syntaxes = {
+        'intel': keystone.KS_OPT_SYNTAX_INTEL,
+        'att': keystone.KS_OPT_SYNTAX_ATT
+    }
+
+    def assemble_code(self, arch, code, mode=None, syntax='intel'):
         if arch in self.assembler_architectures:
             target = self.assembler_architectures[arch]
 
@@ -59,6 +64,9 @@ class Assembler(Badges):
                 target[1] = keystone.KS_MODE_THUMB + keystone.KS_MODE_BIG_ENDIAN
 
             ks = keystone.Ks(*target)
+            if syntax in self.assembler_syntaxes:
+                ks.syntax = self.assembler_syntaxes[syntax]
+
             machine = ks.asm(code.encode())
 
             if machine:
