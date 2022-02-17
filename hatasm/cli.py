@@ -39,7 +39,8 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
     )
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('--arch', dest='arch', help='Architecture to assemble or disassemble for.')
-    parser.add_argument('--mode', dest='mode', help='Architecture mode (used for armle or armbe - arm/thumb).')
+    parser.add_argument('--mode', dest='mode', help='Architecture mode (for example - arm/thumb).')
+    parser.add_argument('--syntax', dest='syntax', help='Assembler/Disassembler syntax (for example - intel/att).')
     parser.add_argument('-i', '--input', dest='input', help='Input file for assembler or disassembler.')
     parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
     parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
@@ -47,6 +48,9 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
     args = parser.parse_args()
 
     def start(self):
+        if not self.args.syntax:
+            self.args.syntax = 'intel'
+
         if (self.args.assembler or self.args.disassembler) and self.args.arch:
             if self.args.assembler:
                 if self.args.arch not in self.assembler_architectures:
@@ -59,15 +63,15 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
 
             if self.args.input:
                 if self.args.assembler:
-                    self.assemble_from(self.args.arch, self.args.input, self.args.mode)
+                    self.assemble_from(self.args.arch, self.args.input, self.args.mode, self.args.syntax)
                 else:
-                    self.disassemble_from(self.arch, self.args.input, self.args.mode)
+                    self.disassemble_from(self.arch, self.args.input, self.args.mode, self.args.syntax)
 
             else:
                 if self.args.assembler:
-                    self.assemble_cli(self.args.arch, self.args.mode)
+                    self.assemble_cli(self.args.arch, self.args.mode, self.args.syntax)
                 else:
-                    self.disassemble_cli(self.args.arch, self.args.mode)
+                    self.disassemble_cli(self.args.arch, self.args.mode, self.args.syntax)
         else:
             self.parser.print_help()
 
