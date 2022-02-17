@@ -29,28 +29,28 @@ from .disassembler import Disassembler
 
 
 class HatAsm(Assembler, Disassembler):
-    def assemble(self, arch, code, mode=None):
-        return self.assemble_code(arch, code, mode)
+    def assemble(self, arch, code, mode=None, syntax='intel'):
+        return self.assemble_code(arch, code, mode, syntax)
 
-    def assemble_to(self, arch, code, mode=None, filename='a.bin'):
+    def assemble_to(self, arch, code, mode=None, syntax='intel', filename='a.bin'):
         with open(filename, 'wb') as f:
-            f.write(self.assemble_code(arch, code, mode))
+            f.write(self.assemble_code(arch, code, mode, syntax))
 
-    def assembler_cli(self, arch, mode=None):
-        self.assemble_cli(arch, mode)
+    def assembler_cli(self, arch, mode=None, syntax='intel'):
+        self.assemble_cli(arch, mode, syntax)
 
-    def disassemble(self, arch, code, mode=None):
-        return self.disassemble_code(arch, code, mode)
+    def disassemble(self, arch, code, mode=None, syntax='intel'):
+        return self.disassemble_code(arch, code, mode, syntax)
 
-    def disassemble_to(self, arch, code, mode=None, filename='a.asm'):
-        code = self.disassemble_code(arch, code, mode)
+    def disassemble_to(self, arch, code, mode=None, syntax='intel', filename='a.asm'):
+        code = self.disassemble_code(arch, code, mode, syntax)
 
         with open(filename, 'w') as f:
             f.write("start:\n")
             f.write(f"    {code['mnemonic']} {code['operand']}\n")
 
-    def disassembler_cli(self, arch, mode=None):
-        self.disassemble_cli(arch, mode)
+    def disassembler_cli(self, arch, mode=None, syntax='intel'):
+        self.disassemble_cli(arch, mode, syntax)
 
     def hexdump(self, code, length=16, sep='.'):
         return self.hexdump_code(code, length, sep)
