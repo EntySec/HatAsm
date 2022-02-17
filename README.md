@@ -32,15 +32,15 @@ There are all HatAsm basic functions that can be used to generate payload, cover
 
 ### Assembler functions
 
-* `assemble(arch, code, mode=None)` - Generate byte code for specified target from specified assembly code.
-* `assemble_to(arch, code, mode=None, filename='a.bin')` - Generate byte code for specified target from specified assembly code and save it in to the specified file.
-* `assembler_cli(arch, mode=None)` - Assembler CLI.
+* `assemble(arch, code, mode=None, syntax='intel')` - Generate byte code for specified target from specified assembly code.
+* `assemble_to(arch, code, mode=None, syntax='intel', filename='a.bin')` - Generate byte code for specified target from specified assembly code and save it in to the specified file.
+* `assembler_cli(arch, mode=None, syntax='intel')` - Assembler CLI.
 
 ### Disassembler functions
 
-* `disassemble(arch, code, mode=None)` - Generate assembly code for specified target from specified byte code.
-* `disassemble_to(arch, code, mode=None, filename='a.asm')` - Generate assembly code for specified target from specified byte code and save it in to the specified file.
-* `disassembler_cli(arch, mode=None)` - Disassembler CLI.
+* `disassemble(arch, code, mode=None, syntax='intel')` - Generate assembly code for specified target from specified byte code.
+* `disassemble_to(arch, code, mode=None, syntax='intel', filename='a.asm')` - Generate assembly code for specified target from specified byte code and save it in to the specified file.
+* `disassembler_cli(arch, mode=None, syntax='intel')` - Disassembler CLI.
 
 ### Misc functions
 
