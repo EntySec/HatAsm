@@ -65,7 +65,10 @@ class Assembler(Badges):
 
             ks = keystone.Ks(*target)
             if syntax in self.assembler_syntaxes:
-                ks.syntax = self.assembler_syntaxes[syntax]
+                try:
+                    ks.syntax = self.assembler_syntaxes[syntax]
+                except Exception:
+                    pass
 
             machine = ks.asm(code.encode())
 
