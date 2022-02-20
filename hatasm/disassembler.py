@@ -67,7 +67,10 @@ class Disassembler(Badges):
 
             cs = capstone.Cs(*target)
             if syntax in self.disassembler_syntaxes:
-                cs.syntax = self.disassembler_syntaxes[syntax]
+                try:
+                    cs.syntax = self.disassembler_syntaxes[syntax]
+                except Exception:
+                    pass
 
             assembly = []
 
