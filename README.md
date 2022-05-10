@@ -78,7 +78,7 @@ HatAsm also has their own command line interface that can be invoked by executin
 usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT]
               [-o OUTPUT] [-a] [-d]
 
-HatAsm is a HatSploit native powerful assembler and disassembler that provides
+HatAsm is a powerful assembler and disassembler that provides
 support for all common architectures.
 
 optional arguments:
