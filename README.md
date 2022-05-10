@@ -12,7 +12,7 @@
     </a>
 </p>
 
-HatAsm is a HatSploit native powerful assembler and disassembler that provides support for all common architectures.
+HatAsm is a powerful assembler and disassembler that provides support for all common architectures.
 
 ## Features
 
