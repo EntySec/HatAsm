@@ -34,7 +34,7 @@ from .disassembler import Disassembler
 
 class HatAsmCLI(Assembler, Disassembler, Badges):
     description = (
-        "HatAsm is a HatSploit native powerful assembler and disassembler"
+        "HatAsm is a powerful assembler and disassembler"
         " that provides support for all common architectures."
     )
     parser = argparse.ArgumentParser(description=description)
