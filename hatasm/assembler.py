@@ -1,37 +1,42 @@
-#!/usr/bin/env python3
+"""
+MIT License
 
-#
-# MIT License
-#
-# Copyright (c) 2020-2022 EntySec
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-#
+Copyright (c) 2020-2022 EntySec
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+import keystone
 import os
 import readline
-import keystone
+from typing import Union
 
 from .badges import Badges
 
 
 class Assembler(Badges):
+    """ Subclass of hatasm module.
+
+    This subclass of hatasm module is intended for providing
+    an implementation of HatAsm assembler.
+    """
+
     assembler_architectures = {
         'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
         'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
@@ -54,7 +59,16 @@ class Assembler(Badges):
         'att': keystone.KS_OPT_SYNTAX_ATT
     }
 
-    def assemble_code(self, arch, code, mode=None, syntax='intel'):
+    def assemble_code(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
+        """ Assemble code for the specified architecture.
+
+        :param str arch: architecture to assemble for
+        :param str code: code to assemble
+        :param str mode: special assembler mode
+        :param str syntax: special assembler syntax
+        :return bytes: assembled code for the specified architecture
+        """
+
         if arch in self.assembler_architectures:
             target = self.assembler_architectures[arch]
 
@@ -76,7 +90,18 @@ class Assembler(Badges):
                 return bytes(machine[0])
         return b''
 
-    def recursive_assemble(self, arch, lines, mode=None, syntax='intel'):
+    def recursive_assemble(self, arch: str, lines: list, mode: str = "",
+                           syntax: str = 'intel') -> Union[bytes, dict]:
+        """ Assemble each entry of a list for the specified architecture.
+
+        :param str arch: architecture to assemble for
+        :param list lines: list of code entries to assemble
+        :param str mode: special assembler mode
+        :param str syntax: special assembler syntax
+        :return Union[bytes, dict]: assembled code in case of success,
+        dictionary of errors in case of fail
+        """
+
         count = 1
         errors = {}
         result = b''
@@ -91,7 +116,17 @@ class Assembler(Badges):
             count += 1
         return errors if errors else result
 
-    def assemble_from(self, arch, filename, mode=None, syntax='intel'):
+    def assemble_from(self, arch: str, filename: str, mode: str = '', syntax: str = 'intel') -> None:
+        """ Assemble each line of a source file for the specified architecture
+        and print result to stdout.
+
+        :param str arch: architecture to assembler for
+        :param str filename: name of a file to assemble from
+        :param str mode: special assembler mode
+        :param str syntax: special assembler syntax
+        :return None: None
+        """
+
         if os.path.exists(filename):
             with open(filename, 'r') as f:
                 code = f.read()
@@ -118,7 +153,15 @@ class Assembler(Badges):
         else:
             self.print_error(f"Local file: {filename}: does not exist!")
 
-    def assemble_cli(self, arch, mode=None, syntax='intel'):
+    def assemble_cli(self, arch: str, mode: str = '', syntax: str = 'intel') -> None:
+        """ Start the assembler command-line interface.
+
+        :param str arch: architecture to assemble for
+        :param str mode: special assembler mode
+        :param str syntax: special assembler syntax
+        :return None: None
+        """
+
         readline.parse_and_bind('tab: complete')
 
         while True:
@@ -166,7 +209,16 @@ class Assembler(Badges):
             except Exception as e:
                 self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
 
-    def hexdump_code(self, code, length=16, sep='.'):
+    @staticmethod
+    def hexdump_code(code: bytes, length: int = 16, sep: str = '.') -> list:
+        """ Dump assembled code as hex.
+
+        :param bytes code: assembled code to dump as hex
+        :param int length: length of each string
+        :param str sep: non-printable chars replacement
+        :return list: list of hexdump strings
+        """
+
         src = code
         filt = ''.join([(len(repr(chr(x))) == 3) and chr(x) or sep for x in range(256)])
         lines = []
