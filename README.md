@@ -28,15 +28,12 @@ pip3 install git+https://github.com/EntySec/HatAsm
 
 ## Basic functions
 
-There are all HatAsm basic functions that can be used to generate payload, covert data, assemble code or inject
-shellcode.
+There are all HatAsm basic functions that can be used to generate payload, covert data, assemble code or inject shellcode.
 
 ### Assembler functions
 
-* `assemble(arch, code, mode=None, syntax='intel')` - Generate byte code for specified target from specified assembly
-  code.
-* `assemble_to(arch, code, mode=None, syntax='intel', filename='a.bin')` - Generate byte code for specified target from
-  specified assembly code and save it in to the specified file.
+* `assemble(arch, code, mode=None, syntax='intel')` - Generate byte code for specified target from specified assembly code.
+* `assemble_to(arch, code, mode=None, syntax='intel', filename='a.bin')` - Generate byte code for specified target from specified assembly code and save it in to the specified file.
 * `assembler_cli(arch, mode=None, syntax='intel')` - Assembler CLI.
 
 ### Disassembler functions
@@ -53,8 +50,7 @@ shellcode.
 
 ## Assembling code
 
-It's very easy to assemble code for various targets in HatAsm. Let's assemble a simple code that calls shutdown for
-Linux.
+It's very easy to assemble code for various targets in HatAsm. Let's assemble a simple code that calls shutdown for Linux.
 
 ### Examples
 
