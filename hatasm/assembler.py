@@ -37,27 +37,30 @@ class Assembler(Badges):
     an implementation of HatAsm assembler.
     """
 
-    assembler_architectures = {
-        'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
-        'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
+    def __init__(self):
+        super().__init__()
 
-        'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32],
-        'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
+        self.assembler_architectures = {
+            'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
+            'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
 
-        'aarch64': [keystone.KS_ARCH_ARM64, 0],
-        'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
-        'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
+            'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32],
+            'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
 
-        'mips64le': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_LITTLE_ENDIAN],
-        'mips64be': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_BIG_ENDIAN],
-        'mipsle': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_LITTLE_ENDIAN],
-        'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
-    }
+            'aarch64': [keystone.KS_ARCH_ARM64, 0],
+            'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
+            'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
 
-    assembler_syntaxes = {
-        'intel': keystone.KS_OPT_SYNTAX_INTEL,
-        'att': keystone.KS_OPT_SYNTAX_ATT
-    }
+            'mips64le': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_LITTLE_ENDIAN],
+            'mips64be': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_BIG_ENDIAN],
+            'mipsle': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_LITTLE_ENDIAN],
+            'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
+        }
+
+        self.assembler_syntaxes = {
+            'intel': keystone.KS_OPT_SYNTAX_INTEL,
+            'att': keystone.KS_OPT_SYNTAX_ATT
+        }
 
     def assemble_code(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
         """ Assemble code for the specified architecture.
