@@ -33,6 +33,9 @@ class HatAsm(Assembler, Disassembler):
     some main HatAsm methods.
     """
 
+    def __init__(self):
+        super().__init__()
+
     def assemble(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
         """ Assemble code for the specified architecture.
 
