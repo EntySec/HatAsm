@@ -37,27 +37,30 @@ class Disassembler(Badges):
     an implementation of HatAsm disassembler.
     """
 
-    disassembler_architectures = {
-        'x86': [capstone.CS_ARCH_X86, capstone.CS_MODE_32],
-        'x64': [capstone.CS_ARCH_X86, capstone.CS_MODE_64],
+    def __init__(self):
+        super().__init__()
 
-        'ppc': [capstone.CS_ARCH_PPC, capstone.CS_MODE_32],
-        'ppc64': [capstone.CS_ARCH_PPC, capstone.CS_MODE_64],
+        self.disassembler_architectures = {
+            'x86': [capstone.CS_ARCH_X86, capstone.CS_MODE_32],
+            'x64': [capstone.CS_ARCH_X86, capstone.CS_MODE_64],
 
-        'aarch64': [capstone.CS_ARCH_ARM64, 0],
-        'armle': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_LITTLE_ENDIAN],
-        'armbe': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_BIG_ENDIAN],
+            'ppc': [capstone.CS_ARCH_PPC, capstone.CS_MODE_32],
+            'ppc64': [capstone.CS_ARCH_PPC, capstone.CS_MODE_64],
 
-        'mips64le': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_LITTLE_ENDIAN],
-        'mips64be': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_BIG_ENDIAN],
-        'mipsle': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_LITTLE_ENDIAN],
-        'mipsbe': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_BIG_ENDIAN]
-    }
+            'aarch64': [capstone.CS_ARCH_ARM64, 0],
+            'armle': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_LITTLE_ENDIAN],
+            'armbe': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_BIG_ENDIAN],
 
-    disassembler_syntaxes = {
-        'intel': capstone.CS_OPT_SYNTAX_INTEL,
-        'att': capstone.CS_OPT_SYNTAX_ATT
-    }
+            'mips64le': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_LITTLE_ENDIAN],
+            'mips64be': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_BIG_ENDIAN],
+            'mipsle': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_LITTLE_ENDIAN],
+            'mipsbe': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_BIG_ENDIAN]
+        }
+
+        self.disassembler_syntaxes = {
+            'intel': capstone.CS_OPT_SYNTAX_INTEL,
+            'att': capstone.CS_OPT_SYNTAX_ATT
+        }
 
     def disassemble_code(self, arch: str, code: bytes, mode: str = '', syntax: str = 'intel') -> list:
         """ Disassemble code for the specified architecture.
