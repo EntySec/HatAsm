@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2020-2022 EntySec
+Copyright (c) 2020-2023 EntySec
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ class HatAsm(Assembler, Disassembler):
     some main HatAsm methods.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def assemble(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
