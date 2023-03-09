@@ -24,9 +24,9 @@ SOFTWARE.
 
 
 class Badges(object):
-    """ Subclass of rombuster module.
+    """ Subclass of hatasm module.
 
-    This subclass of rombuster module is intended for providing
+    This subclass of hatasm module is intended for providing
     some message printing methods.
     """
 
