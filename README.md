@@ -74,7 +74,7 @@ shellcode = hatasm.assemble('x64', code)
 
 ## HatAsm CLI
 
-HatAsm also has their own command line interface that can be invoked by executing `hatasm` command:
+HatAsm also has its own command line interface that can be invoked by executing `hatasm` command:
 
 ```
 usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT]
