@@ -44,7 +44,8 @@ setup(name='hatasm',
       },
       install_requires=[
           'capstone',
-          'keystone-engine'
+          'keystone-engine',
+          'badges @ git+https://github.com/EntySec/Badges'
       ],
       zip_safe=False
       )
