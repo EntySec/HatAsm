@@ -27,7 +27,7 @@ import codecs
 import os
 import readline
 
-from .badges import Badges
+from badges import Badges
 
 
 class Disassembler(Badges):
