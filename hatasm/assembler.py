@@ -27,7 +27,7 @@ import os
 import readline
 from typing import Union
 
-from .badges import Badges
+from badges import Badges
 
 
 class Assembler(Badges):
