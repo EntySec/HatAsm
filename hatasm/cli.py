@@ -26,7 +26,7 @@ import argparse
 import sys
 
 from .assembler import Assembler
-from .badges import Badges
+from badges import Badges
 from .disassembler import Disassembler
 
 
