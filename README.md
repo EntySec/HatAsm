@@ -7,6 +7,9 @@
     <a href="https://github.com/EntySec/HatAsm">
         <img src="https://img.shields.io/badge/language-Python-blue.svg">
     </a>
+    <a href="https://github.com/EntySec/HatAsm/forks">
+        <img src="https://img.shields.io/github/forks/EntySec/HatAsm?color=green">
+    </a>
     <a href="https://github.com/EntySec/HatAsm/stargazers">
         <img src="https://img.shields.io/github/stars/EntySec/HatAsm?color=yellow">
     </a>
