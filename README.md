@@ -13,6 +13,9 @@
     <a href="https://github.com/EntySec/HatAsm/stargazers">
         <img src="https://img.shields.io/github/stars/EntySec/HatAsm?color=yellow">
     </a>
+    <a href="https://www.codefactor.io/repository/github/EntySec/HatAsm">
+        <img src="https://www.codefactor.io/repository/github/EntySec/Pex/HatAsm" />
+    </a>
 </p>
 
 HatAsm is a powerful assembler and disassembler that provides support for all common architectures.
