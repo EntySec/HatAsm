@@ -84,7 +84,7 @@ class Disassembler(Badges):
             if syntax in self.disassembler_syntaxes:
                 try:
                     cs.syntax = self.disassembler_syntaxes[syntax]
-                except Exception:
+                except BaseException:
                     pass
 
             assembly = []
