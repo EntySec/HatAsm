@@ -84,7 +84,7 @@ class Assembler(Badges):
             if syntax in self.assembler_syntaxes:
                 try:
                     ks.syntax = self.assembler_syntaxes[syntax]
-                except Exception:
+                except BaseException:
                     pass
 
             machine = ks.asm(code.encode())
