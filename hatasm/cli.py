@@ -79,7 +79,7 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
                 if self.args.assembler:
                     self.assemble_from(self.args.arch, self.args.input, self.args.mode, self.args.syntax)
                 else:
-                    self.disassemble_from(self.arch, self.args.input, self.args.mode, self.args.syntax)
+                    self.disassemble_from(self.args.arch, self.args.input, self.args.mode, self.args.syntax)
 
             else:
                 if self.args.assembler:
