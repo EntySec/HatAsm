@@ -145,7 +145,7 @@ class Disassembler(Badges):
                 result = self.disassemble_code(arch, code, mode, syntax)
 
                 for line in result:
-                    self.print_empty("0x%x: %s %s" % (line['address'], line['mnemonic'], line['operand']))
+                    self.print_empty("0x%x:\t%s\t%s" % (line['address'], line['mnemonic'], line['operand']))
 
             except Exception:
                 self.print_empty()
