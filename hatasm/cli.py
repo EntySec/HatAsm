@@ -53,7 +53,7 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
         self.parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
         self.parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
         self.parser.add_argument('-d', '--disassembler', action='store_true', dest='disassembler',
-                        help='Launch HatAsm disassembler.')
+                                 help='Launch HatAsm disassembler.')
         self.args = self.parser.parse_args()
 
     def start(self) -> None:

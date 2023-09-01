@@ -36,94 +36,74 @@ class HatAsm(Assembler, Disassembler):
     def __init__(self) -> None:
         super().__init__()
 
-    def assemble(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
+    def assemble(self, *args, **kwargs) -> bytes:
         """ Assemble code for the specified architecture.
 
-        :param str arch: architecture to assemble for
-        :param str code: code to assemble
-        :param str mode: special assembler mode
-        :param str syntax: special assembler syntax
         :return bytes: assembled code for the specified architecture
         """
 
-        return self.assemble_code(arch, code, mode, syntax)
+        return self.assemble_code(*args, **kwargs)
 
-    def assemble_to(self, arch: str, code: str, mode: str = '',
-                    syntax: str = 'intel', filename: str = 'a.bin') -> None:
+    def assemble_to(self, *args, filename: str = 'a.bin', **kwargs) -> None:
         """ Assemble code for the specified architecture and save it
         to the specified file.
 
-        :param str arch: architecture to assemble for
-        :param str code: code to assemble
-        :param str mode: special assembler mode
-        :param str syntax: special assembler syntax
         :param str filename: name of the file to save assembled code to
         :return None: None
         """
 
         with open(filename, 'wb') as f:
-            f.write(self.assemble_code(arch, code, mode, syntax))
+            f.write(self.assemble_code(*args, **kwargs))
 
-    def assembler_cli(self, arch: str, mode: str = '', syntax: str = 'intel') -> None:
+    def assembler_cli(self, *args, **kwargs) -> None:
         """ Start the assembler command-line interface.
 
-        :param str arch: architecture to assemble for
-        :param str mode: special assembler mode
-        :param str syntax: special assembler syntax
         :return None: None
         """
 
-        self.assemble_cli(arch, mode, syntax)
+        self.assemble_cli(*args, **kwargs)
 
-    def disassemble(self, arch: str, code: bytes, mode: str = '', syntax: str = 'intel') -> list:
+    def disassemble(self, *args, **kwargs) -> list:
         """ Disassemble code for the specified architecture.
 
-        :param str arch: architecture to disassemble for
-        :param bytes code: code to disassemble
-        :param str mode: special disassembler mode
-        :param str syntax: special disassembler syntax
         :return list: disassembled code for the specified architecture
         """
 
-        return self.disassemble_code(arch, code, mode, syntax)
+        return self.disassemble_code(*args, **kwargs)
 
-    def disassemble_to(self, arch: str, code: bytes, mode: str = '',
-                       syntax: str = 'intel', filename: str = 'a.asm') -> None:
+    def disassemble_to(self, *args, filename: str = 'a.asm', **kwargs) -> None:
         """ Disassemble code for the specified architecture and save it
         to the specified file.
 
-        :param str arch: architecture to disassemble for
-        :param bytes code: code to disassemble
-        :param str mode: special disassembler mode
-        :param str syntax: special disassembler syntax
         :param str filename: name of the file to save disassembled code to
         :return None: None
         """
 
-        code = self.disassemble_code(arch, code, mode, syntax)
+        code = self.disassemble_code(*args, **kwargs)
 
         with open(filename, 'w') as f:
-            f.write("start:\n")
-            f.write(f"    {code['mnemonic']} {code['operand']}\n")
+            f.write(f"{code.mnemonic}\t{code.op_str}\n")
 
-    def disassembler_cli(self, arch: str, mode: str = '', syntax: str = 'intel') -> None:
+    def disassembler_cli(self, *args, **kwargs) -> None:
         """ Start the disassembler command-line interface.
 
-        :param str arch: architecture to disassemble for
-        :param str mode: special disassembler mode
-        :param str syntax: special disassembler syntax
         :return None: None
         """
 
-        self.disassemble_cli(arch, mode, syntax)
+        self.disassemble_cli(*args, **kwargs)
 
-    def hexdump(self, code: bytes, length: int = 16, sep: str = '.') -> list:
+    def hexdump(self, *args, **kwargs) -> list:
         """ Dump assembled code as hex.
 
-        :param bytes code: assembled code to dump as hex
-        :param int length: length of each string
-        :param str sep: non-printable chars replacement
         :return list: list of hexdump strings
         """
 
-        return self.hexdump_code(code, length, sep)
+        return self.hexdump_code(*args, **kwargs)
+
+    def hexdump_asm(self, *args, **kwargs) -> list:
+        """ Dump assembled code as hex.
+
+        :return list: list of hexdump strings
+        """
+
+        return self.hexdump_asm_code(*args, **kwargs)

@@ -211,28 +211,3 @@ class Assembler(Badges):
 
             except Exception as e:
                 self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
-
-    @staticmethod
-    def hexdump_code(code: bytes, length: int = 16, sep: str = '.') -> list:
-        """ Dump assembled code as hex.
-
-        :param bytes code: assembled code to dump as hex
-        :param int length: length of each string
-        :param str sep: non-printable chars replacement
-        :return list: list of hexdump strings
-        """
-
-        src = code
-        filt = ''.join([(len(repr(chr(x))) == 3) and chr(x) or sep for x in range(256)])
-        lines = []
-
-        for c in range(0, len(src), length):
-            chars = src[c: c + length]
-            hex_ = ' '.join(['{:02x}'.format(x) for x in chars])
-
-            if len(hex_) > 24:
-                hex_ = '{} {}'.format(hex_[:24], hex_[24:])
-
-            printable = ''.join(['{}'.format((x <= 127 and filt[x]) or sep) for x in chars])
-            lines.append('{0:08x}  {1:{2}s} |{3:{4}s}|'.format(c, hex_, length * 3, printable, length))
-        return lines

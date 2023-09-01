@@ -90,11 +90,7 @@ class Disassembler(Badges):
             assembly = []
 
             for i in cs.disasm(code, 0x10000000):
-                assembly.append({
-                    'address': i.address,
-                    'mnemonic': i.mnemonic,
-                    'operand': i.op_str
-                })
+                assembly.append(i)
 
             return assembly
         return []
@@ -116,7 +112,7 @@ class Disassembler(Badges):
                 result = self.disassemble_code(arch, code, mode, syntax)
 
                 for line in result:
-                    self.print_empty("0x%x:\t%s\t%s" % (line['address'], line['mnemonic'], line['operand']))
+                    self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic, line.op_str))
         else:
             self.print_error(f"Local file: {filename}: does not exist!")
 
@@ -145,7 +141,55 @@ class Disassembler(Badges):
                 result = self.disassemble_code(arch, code, mode, syntax)
 
                 for line in result:
-                    self.print_empty("0x%x:\t%s\t%s" % (line['address'], line['mnemonic'], line['operand']))
+                    self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic, line.op_str))
 
             except Exception:
                 self.print_empty()
+
+    @staticmethod
+    def hexdump_code(code: bytes, length: int = 16, sep: str = '.') -> list:
+        """ Dump assembled code as hex.
+
+        :param bytes code: assembled code to dump as hex
+        :param int length: length of each string
+        :param str sep: non-printable chars replacement
+        :return list: list of hexdump strings
+        """
+
+        src = code
+        filt = ''.join([(len(repr(chr(x))) == 3) and chr(x) or sep for x in range(256)])
+        lines = []
+
+        for c in range(0, len(src), length):
+            chars = src[c: c + length]
+            hex_ = ' '.join(['{:02x}'.format(x) for x in chars])
+
+            if len(hex_) > 24:
+                hex_ = '{} {}'.format(hex_[:24], hex_[24:])
+
+            printable = ''.join(['{}'.format((x <= 127 and filt[x]) or sep) for x in chars])
+            lines.append('{0:08x}  {1:{2}s} |{3:{4}s}|'.format(c, hex_, length * 3, printable, length))
+
+        return lines
+
+    def hexdump_asm_code(self, arch: str, code: bytes, mode: str = '', syntax: str = 'intel',
+                         length: int = 16, sep: str = '.') -> list:
+        """ Dump assembled code as hex.
+
+        :param str arch: architecture to disassemble for
+        :param bytes code: code to disassemble
+        :param str mode: special disassembler mode
+        :param str syntax: special disassembler syntax
+        :param int length: length of each string
+        :param str sep: non-printable chars replacement
+        :return list: list of hexdump strings
+        """
+
+        assembly = self.disassemble_code(arch, code, mode, syntax)
+        data = []
+
+        for line in assembly:
+            for result in self.hexdump_code(line.bytes, length, sep):
+                data.append('{}  {}\t{}'.format(result, line.mnemonic, line.op_str))
+
+        return data
