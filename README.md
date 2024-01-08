@@ -1,22 +1,10 @@
 # HatAsm
 
-<p>
-    <a href="https://entysec.com">
-        <img src="https://img.shields.io/badge/developer-EntySec-blue.svg">
-    </a>
-    <a href="https://github.com/EntySec/HatAsm">
-        <img src="https://img.shields.io/badge/language-Python-blue.svg">
-    </a>
-    <a href="https://github.com/EntySec/HatAsm/forks">
-        <img src="https://img.shields.io/github/forks/EntySec/HatAsm?color=green">
-    </a>
-    <a href="https://github.com/EntySec/HatAsm/stargazers">
-        <img src="https://img.shields.io/github/stars/EntySec/HatAsm?color=yellow">
-    </a>
-    <a href="https://www.codefactor.io/repository/github/EntySec/HatAsm">
-        <img src="https://www.codefactor.io/repository/github/EntySec/Pex/HatAsm">
-    </a>
-</p>
+[![Developer](https://img.shields.io/badge/developer-EntySec-blue.svg)](https://entysec.com)
+[![Language](https://img.shields.io/badge/language-Python-blue.svg)](https://github.com/EntySec/HatAsm)
+[![Forks](https://img.shields.io/github/forks/EntySec/HatAsm?style=flat&color=green)](https://github.com/EntySec/HatAsm/forks)
+[![Stars](https://img.shields.io/github/stars/EntySec/HatAsm?style=flat&color=yellow)](https://github.com/EntySec/HatAsm/stargazers)
+[![CodeFactor](https://www.codefactor.io/repository/github/EntySec/HatAsm/badge)](https://www.codefactor.io/repository/github/EntySec/HatAsm)
 
 HatAsm is a powerful assembler and disassembler that provides support for all common architectures.
 
