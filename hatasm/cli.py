@@ -23,10 +23,10 @@ SOFTWARE.
 """
 
 import argparse
-import sys
+
+from badges import Badges
 
 from .assembler import Assembler
-from badges import Badges
 from .disassembler import Disassembler
 
 
@@ -37,24 +37,21 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
     command-line interface for HatAsm.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    description = (
+        "HatAsm is a powerful assembler and disassembler"
+        " that provides support for all common architectures."
+    )
 
-        self.description = (
-            "HatAsm is a powerful assembler and disassembler"
-            " that provides support for all common architectures."
-        )
-
-        self.parser = argparse.ArgumentParser(description=self.description)
-        self.parser.add_argument('--arch', dest='arch', help='Architecture to assemble or disassemble for.')
-        self.parser.add_argument('--mode', dest='mode', help='Architecture mode (for example - arm/thumb).')
-        self.parser.add_argument('--syntax', dest='syntax', help='Assembler/Disassembler syntax (for example - intel/att).')
-        self.parser.add_argument('-i', '--input', dest='input', help='Input file for assembler or disassembler.')
-        self.parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
-        self.parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
-        self.parser.add_argument('-d', '--disassembler', action='store_true', dest='disassembler',
-                                 help='Launch HatAsm disassembler.')
-        self.args = self.parser.parse_args()
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--arch', dest='arch', help='Architecture to assemble or disassemble for.')
+    parser.add_argument('--mode', dest='mode', help='Architecture mode (for example - arm/thumb).')
+    parser.add_argument('--syntax', dest='syntax', help='Assembler/Disassembler syntax (for example - intel/att).')
+    parser.add_argument('-i', '--input', dest='input', help='Input file for assembler or disassembler.')
+    parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
+    parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
+    parser.add_argument('-d', '--disassembler', action='store_true', dest='disassembler',
+                        help='Launch HatAsm disassembler.')
+    args = parser.parse_args()
 
     def start(self) -> None:
         """ Main command-line arguments handler.
