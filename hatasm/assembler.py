@@ -22,11 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import keystone
 import os
+import keystone
 import readline
-from typing import Union
 
+from typing import Union
 from badges import Badges
 
 
@@ -37,30 +37,27 @@ class Assembler(Badges):
     an implementation of HatAsm assembler.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    assembler_architectures = {
+        'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
+        'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
 
-        self.assembler_architectures = {
-            'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
-            'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
+        'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32],
+        'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
 
-            'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32],
-            'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
+        'aarch64': [keystone.KS_ARCH_ARM64, 0],
+        'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
+        'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
 
-            'aarch64': [keystone.KS_ARCH_ARM64, 0],
-            'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
-            'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
+        'mips64le': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_LITTLE_ENDIAN],
+        'mips64be': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_BIG_ENDIAN],
+        'mipsle': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_LITTLE_ENDIAN],
+        'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
+    }
 
-            'mips64le': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_LITTLE_ENDIAN],
-            'mips64be': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_BIG_ENDIAN],
-            'mipsle': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_LITTLE_ENDIAN],
-            'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
-        }
-
-        self.assembler_syntaxes = {
-            'intel': keystone.KS_OPT_SYNTAX_INTEL,
-            'att': keystone.KS_OPT_SYNTAX_ATT
-        }
+    assembler_syntaxes = {
+        'intel': keystone.KS_OPT_SYNTAX_INTEL,
+        'att': keystone.KS_OPT_SYNTAX_ATT
+    }
 
     def assemble_code(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
         """ Assemble code for the specified architecture.
