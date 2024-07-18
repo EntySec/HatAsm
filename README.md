@@ -1,4 +1,6 @@
-# HatAsm
+<h3 align="left">
+    <img src="https://github.com/enty8080/HatAsm/blob/main/data/logo.png" alt="logo" height="250px">
+</h3>
 
 [![Developer](https://img.shields.io/badge/developer-EntySec-blue.svg)](https://entysec.com)
 [![Language](https://img.shields.io/badge/language-Python-blue.svg)](https://github.com/EntySec/HatAsm)
