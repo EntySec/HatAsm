@@ -13,8 +13,8 @@ HatAsm is a powerful assembler and disassembler that provides support for all co
 ## Features
 
 * Assembler and disassembler both available in one tool.
-* Support for most common architectures (e.g `x64`, `x86`, `aarch64`, `armle`, `mipsle`, `mipsbe`, etc).
-* Ability to assemble code right into the byte code or pack into an executable (e.g. `ELF`, `Mach-O`, `PE`).
+* Support for most common architectures (e.g **x64**, **x86**, **aarch64**, **armle**, **mipsle**, **mipsbe**, etc).
+* Ability to assemble code right into the byte code or pack into an executable (e.g. **ELF**, **Mach-O**, **PE**).
 
 ## Installation
 
@@ -115,7 +115,7 @@ options:
 hatasm -a --arch x64
 ```
 
-Run interactive assembler shell for `x64` architecture.
+Run interactive assembler shell for **x64** architecture.
 
 ```
 hatasm (x64) > nop
@@ -129,7 +129,7 @@ hatasm (x64) > start:
 hatasm (x64) >
 ```
 
-Write macOS execve() /bin/sh shellcode from command-line.
+Write macOS **x64** execve() /bin/sh shellcode from command-line.
 
 ```
 hatasm (x64) > start:
