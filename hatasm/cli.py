@@ -24,13 +24,10 @@ SOFTWARE.
 
 import argparse
 
-from badges import Badges
-
-from .assembler import Assembler
-from .disassembler import Disassembler
+from .__main__ import HatAsm
 
 
-class HatAsmCLI(Assembler, Disassembler, Badges):
+class HatAsmCLI(HatAsm):
     """ Subclass of hatasm module.
 
     This subclass of hatasm module is intended for providing
@@ -48,9 +45,10 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
     parser.add_argument('--syntax', dest='syntax', help='Assembler/Disassembler syntax (for example - intel/att).')
     parser.add_argument('-i', '--input', dest='input', help='Input file for assembler or disassembler.')
     parser.add_argument('-o', '--output', dest='output', help='Output file to write output.')
-    parser.add_argument('-a', '--assembler', action='store_true', dest='assembler', help='Launch HatAsm assembler.')
-    parser.add_argument('-d', '--disassembler', action='store_true', dest='disassembler',
+    parser.add_argument('-a', '--assemble', action='store_true', dest='asm', help='Launch HatAsm assembler.')
+    parser.add_argument('-d', '--disassemble', action='store_true', dest='disasm',
                         help='Launch HatAsm disassembler.')
+    parser.add_argument('-f', '--format', dest='format', help='Output file format (e.g. elf, macho, pe).')
     args = parser.parse_args()
 
     def start(self) -> None:
@@ -62,29 +60,65 @@ class HatAsmCLI(Assembler, Disassembler, Badges):
         if not self.args.syntax:
             self.args.syntax = 'intel'
 
-        if (self.args.assembler or self.args.disassembler) and self.args.arch:
-            if self.args.assembler:
-                if self.args.arch not in self.assembler_architectures:
-                    self.print_error(f"HatAsm: assembler failed: unsupported architecture")
-                    return
-            else:
-                if self.args.arch not in self.disassembler_architectures:
-                    self.print_error(f"HatAsm: disassembler failed: unsupported architecture")
-                    return
-
-            if self.args.input:
-                if self.args.assembler:
-                    self.assemble_from(self.args.arch, self.args.input, self.args.mode, self.args.syntax)
-                else:
-                    self.disassemble_from(self.args.arch, self.args.input, self.args.mode, self.args.syntax)
-
-            else:
-                if self.args.assembler:
-                    self.assemble_cli(self.args.arch, self.args.mode, self.args.syntax)
-                else:
-                    self.disassemble_cli(self.args.arch, self.args.mode, self.args.syntax)
-        else:
+        if not self.args.arch:
             self.parser.print_help()
+            return
+
+        if not self.args.asm and not self.args.disasm:
+            self.parser.print_help()
+            return
+
+        if self.args.asm and self.args.arch:
+            if self.args.arch not in self.keystone_arch:
+                self.print_error(f"HatAsm: assembler failed: unsupported architecture")
+                return
+        else:
+            if self.args.arch not in self.capstone_arch:
+                self.print_error(f"HatAsm: disassembler failed: unsupported architecture")
+                return
+
+        if self.args.input:
+            if self.args.asm:
+                result = self.assemble_from(self.args.arch, self.args.input,
+                                            self.args.mode, self.args.syntax)
+                if not result:
+                    return
+
+                if self.args.output:
+                    if self.args.format:
+                        result = self.pack_exe(result, self.args.arch,
+                                               self.args.format)
+
+                    with open(self.args.output, 'wb') as f:
+                        f.write(result)
+                    return
+
+                for line in self.hexdump(result):
+                    self.print_empty(line)
+            else:
+                result = self.disassemble_from(self.args.arch, self.args.input,
+                                               self.args.mode, self.args.syntax)
+
+                if not result:
+                    return
+
+                if self.args.output:
+                    with open(self.args.output, 'w') as f:
+                        for opcode in result:
+                            f.write(f"{opcode.mnemonic}\t{opcode.op_str}\n")
+                    return
+
+                for line in result:
+                    self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic,
+                                                        line.op_str))
+            return
+
+        if self.args.asm:
+            self.assemble_cli(self.args.arch, self.args.mode,
+                              self.args.syntax)
+        else:
+            self.disassemble_cli(self.args.arch, self.args.mode,
+                                 self.args.syntax)
 
 
 def main() -> None:

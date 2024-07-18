@@ -22,88 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .assembler import Assembler
-from .disassembler import Disassembler
+from .asm import ASM
+from .exe import EXE
 
 
-class HatAsm(Assembler, Disassembler):
+class HatAsm(ASM, EXE):
     """ Main class of hatasm module.
 
     This main class of hatasm module is intended for providing
     some main HatAsm methods.
     """
 
-    def __init__(self) -> None:
-        super().__init__()
+    def assemble_pack(self, arch: str, code: str, format: str, *args, **kwargs) -> bytes:
+        """ Assemble code and pack into executable format.
 
-    def assemble(self, *args, **kwargs) -> bytes:
-        """ Assemble code for the specified architecture.
-
-        :return bytes: assembled code for the specified architecture
+        :param str arch: architecture to assemble for
+        :param str code: code to assemble
+        :param str format: format to use (e.g. elf, macho, pe)
+        :return bytes: packed data
         """
 
-        return self.assemble_code(*args, **kwargs)
-
-    def assemble_to(self, *args, filename: str = 'a.bin', **kwargs) -> None:
-        """ Assemble code for the specified architecture and save it
-        to the specified file.
-
-        :param str filename: name of the file to save assembled code to
-        :return None: None
-        """
-
-        with open(filename, 'wb') as f:
-            f.write(self.assemble_code(*args, **kwargs))
-
-    def assembler_cli(self, *args, **kwargs) -> None:
-        """ Start the assembler command-line interface.
-
-        :return None: None
-        """
-
-        self.assemble_cli(*args, **kwargs)
-
-    def disassemble(self, *args, **kwargs) -> list:
-        """ Disassemble code for the specified architecture.
-
-        :return list: disassembled code for the specified architecture
-        """
-
-        return self.disassemble_code(*args, **kwargs)
-
-    def disassemble_to(self, *args, filename: str = 'a.asm', **kwargs) -> None:
-        """ Disassemble code for the specified architecture and save it
-        to the specified file.
-
-        :param str filename: name of the file to save disassembled code to
-        :return None: None
-        """
-
-        code = self.disassemble_code(*args, **kwargs)
-
-        with open(filename, 'w') as f:
-            f.write(f"{code.mnemonic}\t{code.op_str}\n")
-
-    def disassembler_cli(self, *args, **kwargs) -> None:
-        """ Start the disassembler command-line interface.
-
-        :return None: None
-        """
-
-        self.disassemble_cli(*args, **kwargs)
-
-    def hexdump(self, *args, **kwargs) -> list:
-        """ Dump assembled code as hex.
-
-        :return list: list of hexdump strings
-        """
-
-        return self.hexdump_code(*args, **kwargs)
-
-    def hexdump_asm(self, *args, **kwargs) -> list:
-        """ Dump assembled code as hex.
-
-        :return list: list of hexdump strings
-        """
-
-        return self.hexdump_asm_code(*args, **kwargs)
+        result = self.assemble(arch, code, *args, **kwargs)
+        return self.pack_exe(result, arch, format)

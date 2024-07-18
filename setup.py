@@ -43,6 +43,8 @@ setup(name='hatasm',
           ]
       },
       install_requires=[
+          'lief',
+          'pyelftools',
           'capstone',
           'keystone-engine',
           'badges @ git+https://github.com/EntySec/Badges'
