@@ -110,11 +110,11 @@ class PE(object):
 
                 pe = self.pe_headers[header_arch] + data
 
-                if arch == ARCH_X86:
+                if arch == 'x86':
                     pe += b'\xff' * 4 + b'\x00' * 4 + b'\xff' * 4
                     content = pe.ljust(1536, b'\x00')
 
-                elif arch == ARCH_X64:
+                elif arch == 'x64':
                     pe += b'\x00' * 7 + b'\xff' * 8 + b'\x00' * 8 + b'\xff' * 8
                     content = pe.ljust(2048, b'\x00')
 
