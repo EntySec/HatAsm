@@ -63,7 +63,7 @@ class EXE(DLL, Dylib, ELF, Macho, PE):
         return False
 
     def pack_exe(self, data: bytes, arch: str, format: str,
-                        *args, **kwargs) -> bytes:
+                 *args, **kwargs) -> bytes:
         """ Pack executable.
 
         :param bytes data: data to check
