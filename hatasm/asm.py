@@ -75,8 +75,8 @@ class ASM(Badges):
         'armle': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_LITTLE_ENDIAN],
         'armbe': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_BIG_ENDIAN],
 
-        'sparc': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_SPARC32 + capstone.CS_MODE_BIG_ENDIAN],
-        'sparc64': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_SPARC64 + capstone.CS_MODE_BIG_ENDIAN],
+        'sparc': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_BIG_ENDIAN],
+        'sparc64': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_BIG_ENDIAN],
 
         'mips64le': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_LITTLE_ENDIAN],
         'mips64be': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_BIG_ENDIAN],
