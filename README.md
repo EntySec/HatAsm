@@ -118,21 +118,21 @@ hatasm -a --arch x64
 Run interactive assembler shell for **x64** architecture.
 
 ```
-hatasm (x64) > nop
+hatasm % nop
 00000000  90                                               |.               |
-hatasm (x64) > start:
+hatasm % start:
 ........     xor rax, rax
 ........     cdq
 ........     nop
 ........     
 00000000  48 31 c0 99 90                                   |H1...           |
-hatasm (x64) >
+hatasm %
 ```
 
 Write macOS **x64** execve() /bin/sh shellcode from command-line.
 
 ```
-hatasm (x64) > start:
+hatasm % start:
 ........     xor rax, rax
 ........     cdq
 ........     push rax
@@ -148,5 +148,5 @@ hatasm (x64) > start:
 ........
 00000000  48 31 c0 99 50 48 bf 2f  2f 62 69 6e 2f 73 68 57 |H1..PH.//bin/shW|
 00000010  54 5f 48 31 f6 b0 02 48  c1 c8 28 b0 3b 0f 05    |T_H1...H..(.;.. |
-hatasm (x64) > 
+hatasm %
 ```
