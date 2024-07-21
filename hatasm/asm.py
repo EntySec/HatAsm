@@ -195,7 +195,7 @@ class ASM(Badges):
 
         while True:
             try:
-                code = input(f'hatasm ({arch}) > ')
+                code = input(f'hatasm % ')
 
                 if not code:
                     continue
@@ -215,7 +215,7 @@ class ASM(Badges):
                 try:
                     result = self.assemble(arch, code, mode, syntax)
 
-                    for line in self.hexdump_code(result):
+                    for line in self.hexdump(result):
                         self.print_empty(line)
 
                 except (KeyboardInterrupt, EOFError):
@@ -304,7 +304,7 @@ class ASM(Badges):
 
         while True:
             try:
-                code = input(f'hatasm ({arch}) > ')
+                code = input(f'hatasm % ')
 
                 if not code:
                     continue
