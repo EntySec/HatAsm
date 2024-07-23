@@ -25,6 +25,7 @@ SOFTWARE.
 import argparse
 
 from .__main__ import HatAsm
+from .console import Console
 
 
 class HatAsmCLI(HatAsm):
@@ -113,12 +114,7 @@ class HatAsmCLI(HatAsm):
                                                         line.op_str))
             return
 
-        if self.args.asm:
-            self.assemble_cli(self.args.arch, self.args.mode,
-                              self.args.syntax)
-        else:
-            self.disassemble_cli(self.args.arch, self.args.mode,
-                                 self.args.syntax)
+        Console(self.args.arch, self.args.mode, asm=self.args.asm).shell()
 
 
 def main() -> None:

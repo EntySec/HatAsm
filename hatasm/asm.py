@@ -23,10 +23,8 @@ SOFTWARE.
 """
 
 import os
-import codecs
 import keystone
 import capstone
-import readline
 
 from typing import Union
 from badges import Badges
@@ -182,62 +180,6 @@ class ASM(Badges):
 
         return b''
 
-    def assemble_cli(self, arch: str, mode: str = '', syntax: str = 'intel') -> None:
-        """ Start the assembler command-line interface.
-
-        :param str arch: architecture to assemble for
-        :param str mode: special assembler mode
-        :param str syntax: special assembler syntax
-        :return None: None
-        """
-
-        readline.parse_and_bind('tab: complete')
-
-        while True:
-            try:
-                code = input(f'hatasm % ')
-
-                if not code:
-                    continue
-
-                if code in ['exit', 'quit']:
-                    break
-
-                if code.endswith(':'):
-                    while True:
-                        line = input('........ ')
-
-                        if not line:
-                            break
-
-                        code += line + '\n'
-
-                try:
-                    result = self.assemble(arch, code, mode, syntax)
-
-                    for line in self.hexdump(result):
-                        self.print_empty(line)
-
-                except (KeyboardInterrupt, EOFError):
-                    self.print_empty()
-
-                except Exception:
-                    errors = self.recursive_assemble(arch, code.split('\n'), mode, syntax)
-
-                    if isinstance(errors, dict):
-                        for line in errors:
-                            self.print_error(f"HatAsm: line {str(line)}: {errors[line]}")
-
-                    else:
-                        for line in self.hexdump(errors):
-                            self.print_empty(line)
-
-            except (KeyboardInterrupt, EOFError):
-                self.print_empty()
-
-            except Exception as e:
-                self.print_error(f"HatAsm: line 1: {str(e).split(' (')[0]}")
-
     def disassemble(self, arch: str, code: bytes, mode: str = '', syntax: str = 'intel') -> list:
         """ Disassemble code for the specified architecture.
 
@@ -290,36 +232,6 @@ class ASM(Badges):
             self.print_error(f"Local file: {filename}: does not exist!")
 
         return []
-
-    def disassemble_cli(self, arch: str, mode: str = '', syntax: str = 'intel') -> None:
-        """ Start the disassembler command-line interface.
-
-        :param str arch: architecture to disassemble for
-        :param str mode: special disassembler mode
-        :param str syntax: special disassembler syntax
-        :return None: None
-        """
-
-        readline.parse_and_bind('tab: complete')
-
-        while True:
-            try:
-                code = input(f'hatasm % ')
-
-                if not code:
-                    continue
-
-                if code in ['exit', 'quit']:
-                    break
-
-                code = codecs.escape_decode(code)[0]
-                result = self.disassemble(arch, code, mode, syntax)
-
-                for line in result:
-                    self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic, line.op_str))
-
-            except Exception:
-                self.print_empty()
 
     @staticmethod
     def hexdump(code: bytes, length: int = 16, sep: str = '.') -> list:
