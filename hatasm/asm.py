@@ -23,8 +23,9 @@ SOFTWARE.
 """
 
 import os
-import keystone
-import capstone
+
+from keystone import *
+from capstone import *
 
 from typing import Union
 from badges import Badges
@@ -37,54 +38,54 @@ class ASM(Badges):
     an implementation of HatAsm assembler.
     """
 
-    keystone_arch = {
-        'x86': [keystone.KS_ARCH_X86, keystone.KS_MODE_32],
-        'x64': [keystone.KS_ARCH_X86, keystone.KS_MODE_64],
+    ks_arch = {
+        'x86': (KS_ARCH_X86, KS_MODE_32),
+        'x64': (KS_ARCH_X86, KS_MODE_64),
 
-        'ppc': [keystone.KS_ARCH_PPC, keystone.KS_MODE_32 + keystone.KS_MODE_BIG_ENDIAN],
-        'ppc64': [keystone.KS_ARCH_PPC, keystone.KS_MODE_64],
+        'ppc': (KS_ARCH_PPC, KS_MODE_32 + KS_MODE_BIG_ENDIAN),
+        'ppc64': (KS_ARCH_PPC, KS_MODE_64),
 
-        'aarch64': [keystone.KS_ARCH_ARM64, 0],
-        'armle': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_LITTLE_ENDIAN],
-        'armbe': [keystone.KS_ARCH_ARM, keystone.KS_MODE_ARM + keystone.KS_MODE_BIG_ENDIAN],
+        'aarch64': (KS_ARCH_ARM64, KS_MODE_LITTLE_ENDIAN),
+        'armle': (KS_ARCH_ARM, KS_MODE_ARM + KS_MODE_LITTLE_ENDIAN),
+        'armbe': (KS_ARCH_ARM, KS_MODE_ARM + KS_MODE_BIG_ENDIAN),
 
-        'sparc': [keystone.KS_ARCH_SPARC, keystone.KS_MODE_SPARC32 + keystone.KS_MODE_BIG_ENDIAN],
-        'sparc64': [keystone.KS_ARCH_SPARC, keystone.KS_MODE_SPARC64 + keystone.KS_MODE_BIG_ENDIAN],
+        'sparc': (KS_ARCH_SPARC, KS_MODE_SPARC32 + KS_MODE_BIG_ENDIAN),
+        'sparc64': (KS_ARCH_SPARC, KS_MODE_SPARC64 + KS_MODE_BIG_ENDIAN),
 
-        'mips64le': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_LITTLE_ENDIAN],
-        'mips64be': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS64 + keystone.KS_MODE_BIG_ENDIAN],
-        'mipsle': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_LITTLE_ENDIAN],
-        'mipsbe': [keystone.KS_ARCH_MIPS, keystone.KS_MODE_MIPS32 + keystone.KS_MODE_BIG_ENDIAN]
+        'mips64le': (KS_ARCH_MIPS, KS_MODE_MIPS64 + KS_MODE_LITTLE_ENDIAN),
+        'mips64be': (KS_ARCH_MIPS, KS_MODE_MIPS64 + KS_MODE_BIG_ENDIAN),
+        'mipsle': (KS_ARCH_MIPS, KS_MODE_MIPS32 + KS_MODE_LITTLE_ENDIAN),
+        'mipsbe': (KS_ARCH_MIPS, KS_MODE_MIPS32 + KS_MODE_BIG_ENDIAN)
     }
 
-    keystone_syntax = {
-        'intel': keystone.KS_OPT_SYNTAX_INTEL,
-        'att': keystone.KS_OPT_SYNTAX_ATT
+    cs_arch = {
+        'x86': (CS_ARCH_X86, CS_MODE_32),
+        'x64': (CS_ARCH_X86, CS_MODE_64),
+
+        'ppc': (CS_ARCH_PPC, CS_MODE_32 + CS_MODE_BIG_ENDIAN),
+        'ppc64': (CS_ARCH_PPC, CS_MODE_64),
+
+        'aarch64': (CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN),
+        'armle': (CS_ARCH_ARM, CS_MODE_ARM + CS_MODE_LITTLE_ENDIAN),
+        'armbe': (CS_ARCH_ARM, CS_MODE_ARM + CS_MODE_BIG_ENDIAN),
+
+        'sparc': (CS_ARCH_SPARC, CS_MODE_BIG_ENDIAN),
+        'sparc64': (CS_ARCH_SPARC, CS_MODE_BIG_ENDIAN),
+
+        'mips64le': (CS_ARCH_MIPS, CS_MODE_MIPS64 + CS_MODE_LITTLE_ENDIAN),
+        'mips64be': (CS_ARCH_MIPS, CS_MODE_MIPS64 + CS_MODE_BIG_ENDIAN),
+        'mipsle': (CS_ARCH_MIPS, CS_MODE_MIPS32 + CS_MODE_LITTLE_ENDIAN),
+        'mipsbe': (CS_ARCH_MIPS, CS_MODE_MIPS32 + CS_MODE_BIG_ENDIAN)
     }
 
-    capstone_arch = {
-        'x86': [capstone.CS_ARCH_X86, capstone.CS_MODE_32],
-        'x64': [capstone.CS_ARCH_X86, capstone.CS_MODE_64],
-
-        'ppc': [capstone.CS_ARCH_PPC, capstone.CS_MODE_32 + capstone.CS_MODE_BIG_ENDIAN],
-        'ppc64': [capstone.CS_ARCH_PPC, capstone.CS_MODE_64],
-
-        'aarch64': [capstone.CS_ARCH_ARM64, 0],
-        'armle': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_LITTLE_ENDIAN],
-        'armbe': [capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM + capstone.CS_MODE_BIG_ENDIAN],
-
-        'sparc': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_BIG_ENDIAN],
-        'sparc64': [capstone.CS_ARCH_SPARC, capstone.CS_MODE_BIG_ENDIAN],
-
-        'mips64le': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_LITTLE_ENDIAN],
-        'mips64be': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS64 + capstone.CS_MODE_BIG_ENDIAN],
-        'mipsle': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_LITTLE_ENDIAN],
-        'mipsbe': [capstone.CS_ARCH_MIPS, capstone.CS_MODE_MIPS32 + capstone.CS_MODE_BIG_ENDIAN]
+    ks_syntax = {
+        'intel': KS_OPT_SYNTAX_INTEL,
+        'att': KS_OPT_SYNTAX_ATT
     }
 
-    capstone_syntax = {
-        'intel': capstone.CS_OPT_SYNTAX_INTEL,
-        'att': capstone.CS_OPT_SYNTAX_ATT
+    cs_syntax = {
+        'intel': CS_OPT_SYNTAX_INTEL,
+        'att': CS_OPT_SYNTAX_ATT
     }
 
     def assemble(self, arch: str, code: str, mode: str = '', syntax: str = 'intel') -> bytes:
@@ -97,20 +98,21 @@ class ASM(Badges):
         :return bytes: assembled code for the specified architecture
         """
 
-        if arch in self.keystone_arch:
-            target = self.keystone_arch[arch]
+        if arch in self.ks_arch:
+            target = self.ks_arch[arch]
 
             if arch == 'armle' and mode == 'thumb':
-                target[1] = keystone.KS_MODE_THUMB + keystone.KS_MODE_LITTLE_ENDIAN
+                target[1] = KS_MODE_THUMB + KS_MODE_LITTLE_ENDIAN
             elif arch == 'armbe' and mode == 'thumb':
-                target[1] = keystone.KS_MODE_THUMB + keystone.KS_MODE_BIG_ENDIAN
+                target[1] = KS_MODE_THUMB + KS_MODE_BIG_ENDIAN
 
-            ks = keystone.Ks(*target)
-            if syntax in self.keystone_syntax:
+            ks = Ks(*target)
+
+            if syntax in self.ks_syntax:
                 try:
-                    ks.syntax = self.keystone_syntax[syntax]
+                    ks.syntax = self.ks_syntax[syntax]
                 except BaseException:
-                    pass
+                    ks = Ks(*target)
 
             machine = ks.asm(code.encode())
 
@@ -190,20 +192,21 @@ class ASM(Badges):
         :return list: disassembled code for the specified architecture
         """
 
-        if arch in self.capstone_arch:
-            target = self.capstone_arch[arch]
+        if arch in self.cs_arch:
+            target = self.cs_arch[arch]
 
             if arch == 'armle' and mode == 'thumb':
-                target[1] = capstone.CS_MODE_THUMB + capstone.CS_MODE_LITTLE_ENDIAN
+                target[1] = CS_MODE_THUMB + CS_MODE_LITTLE_ENDIAN
             elif arch == 'armbe' and mode == 'thumb':
-                target[1] = capstone.CS_MODE_THUMB + capstone.CS_MODE_BIG_ENDIAN
+                target[1] = CS_MODE_THUMB + CS_MODE_BIG_ENDIAN
 
-            cs = capstone.Cs(*target)
-            if syntax in self.capstone_syntax:
+            cs = Cs(*target)
+
+            if syntax in self.cs_syntax:
                 try:
-                    cs.syntax = self.capstone_syntax[syntax]
+                    cs.syntax = self.cs_syntax[syntax]
                 except BaseException:
-                    pass
+                    cs = Cs(*target)
 
             assembly = []
 

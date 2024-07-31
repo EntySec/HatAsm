@@ -49,6 +49,8 @@ class HatAsmCLI(HatAsm):
     parser.add_argument('-a', '--assemble', action='store_true', dest='asm', help='Launch HatAsm assembler.')
     parser.add_argument('-d', '--disassemble', action='store_true', dest='disasm',
                         help='Launch HatAsm disassembler.')
+    parser.add_argument('-e', '--emulate', action='store_true', dest='emu',
+                        help='Emulate assembled code (use with -a).')
     parser.add_argument('-f', '--format', dest='format', help='Output file format (e.g. elf, macho, pe).')
     args = parser.parse_args()
 
@@ -70,11 +72,11 @@ class HatAsmCLI(HatAsm):
             return
 
         if self.args.asm and self.args.arch:
-            if self.args.arch not in self.keystone_arch:
+            if self.args.arch not in self.ks_arch:
                 self.print_error(f"HatAsm: assembler failed: unsupported architecture")
                 return
         else:
-            if self.args.arch not in self.capstone_arch:
+            if self.args.arch not in self.cs_arch:
                 self.print_error(f"HatAsm: disassembler failed: unsupported architecture")
                 return
 
@@ -114,7 +116,8 @@ class HatAsmCLI(HatAsm):
                                                         line.op_str))
             return
 
-        Console(self.args.arch, self.args.mode, asm=self.args.asm).shell()
+        Console(self.args.arch, self.args.mode, self.args.syntax,
+                asm=self.args.asm).shell()
 
 
 def main() -> None:

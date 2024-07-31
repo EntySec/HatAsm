@@ -37,12 +37,14 @@ class Console(Cmd, ASM):
     """
 
     def __init__(self, arch: str, mode: str = '',
+                 syntax: str = 'intel',
                  prompt: str = '%linehatasm%end % ',
                  asm: bool = True) -> None:
         """ Initialize assembler/disassembler console.
 
         :param str arch: architecture
         :param str mode: assemble mode (e.g. thumb)
+        :param str syntax: assembler syntax
         :param str prompt: prompt message to display
         :param bool asm: mode (assemble/disassemble)
         :return None: None
@@ -55,6 +57,8 @@ class Console(Cmd, ASM):
 
         self.arch = arch
         self.mode = mode
+        self.syntax = syntax
+
         self.asm = asm
         self.cached = ""
 
@@ -71,7 +75,7 @@ class Console(Cmd, ASM):
 
         try:
             result = self.assemble(
-                self.arch, self.cached, self.mode, 'intel')
+                self.arch, self.cached, self.mode, self.syntax)
 
             for line in self.hexdump(result):
                 self.print_empty(line)
@@ -81,7 +85,7 @@ class Console(Cmd, ASM):
 
         except Exception:
             errors = self.recursive_assemble(
-                self.arch, self.cached.split('\n'), self.mode, 'intel')
+                self.arch, self.cached.split('\n'), self.mode, self.syntax)
 
             if isinstance(errors, dict):
                 for line in errors:
@@ -105,7 +109,7 @@ class Console(Cmd, ASM):
         if not self.asm:
             code = codecs.escape_decode(code)[0]
             result = self.disassemble(
-                self.arch, code, self.mode, 'intel')
+                self.arch, code, self.mode, self.syntax)
 
             for line in result:
                 self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic, line.op_str))
@@ -123,7 +127,7 @@ class Console(Cmd, ASM):
             return
 
         result = self.assemble(
-            self.arch, code, self.mode, 'intel')
+            self.arch, code, self.mode, self.syntax)
 
         for line in self.hexdump(result):
             self.print_empty(line)
