@@ -1,4 +1,6 @@
-# HatAsm
+<h3 align="left">
+    <img src="https://github.com/enty8080/HatAsm/blob/main/data/logo.png" alt="logo" height="250px">
+</h3>
 
 [![Developer](https://img.shields.io/badge/developer-EntySec-blue.svg)](https://entysec.com)
 [![Language](https://img.shields.io/badge/language-Python-blue.svg)](https://github.com/EntySec/HatAsm)
@@ -11,8 +13,8 @@ HatAsm is a powerful assembler and disassembler that provides support for all co
 ## Features
 
 * Assembler and disassembler both available in one tool.
-* Support for most common architectures like `x64`, `x86`, `aarch64`, `armle`, `mipsle`, `mipsbe`.
-* Ability to assemble code right into the byte code.
+* Support for most common architectures (e.g **x64**, **x86**, **aarch64**, **armle**, **mipsle**, **mipsbe**, etc).
+* Ability to assemble code right into the byte code or pack into an executable (e.g. **ELF**, **Mach-O**, **PE**).
 
 ## Installation
 
@@ -20,75 +22,91 @@ HatAsm is a powerful assembler and disassembler that provides support for all co
 pip3 install git+https://github.com/EntySec/HatAsm
 ```
 
-## Basic functions
+## Examples
 
-There are all HatAsm basic functions that can be used to generate payload, covert data, assemble code or inject shellcode.
+### Assemble
 
-### Assembler functions
-
-* `assemble(arch, code, mode=None, syntax='intel')` - Generate byte code for specified target from specified assembly code.
-* `assemble_to(arch, code, mode=None, syntax='intel', filename='a.bin')` - Generate byte code for specified target from specified assembly code and save it in to the specified file.
-* `assembler_cli(arch, mode=None, syntax='intel')` - Assembler CLI.
-
-### Disassembler functions
-
-* `disassemble(arch, code, mode=None, syntax='intel')` - Generate assembly code for specified target from specified byte
-  code.
-* `disassemble_to(arch, code, mode=None, syntax='intel', filename='a.asm')` - Generate assembly code for specified
-  target from specified byte code and save it in to the specified file.
-* `disassembler_cli(arch, mode=None, syntax='intel')` - Disassembler CLI.
-
-### Misc functions
-
-* `hexdump(code, length=16, sep='.')` - Hexdump for byte code.
-
-## Assembling code
-
-It's very easy to assemble code for various targets in HatAsm. Let's assemble a simple code that calls shutdown for Linux.
-
-### Examples
-
-```python
+```python3
 from hatasm import HatAsm
 
+hatasm = HatAsm()
 code = """
 start:
-    push 0x3e
-    pop rax
-    push -1
-    pop rdi
-    push 0x9
-    pop rsi
+    mov al, 0xa2
+    syscall
+
+    mov al, 0xa9
+    mov edx, 0x1234567
+    mov esi, 0x28121969
+    mov edi, 0xfee1dead
     syscall
 """
 
-hatasm = HatAsm()
-shellcode = hatasm.assemble('x64', code)
+result = hatasm.assemble('x64', code)
+
+for line in hatasm.hexdump(result):
+    print(line)
 ```
+
+<details>
+    <summary>Result</summary><br>
+    <pre>
+00000000  b0 a2 0f 05 b0 a9 ba 67  45 23 01 be 69 19 12 28 |.......gE#..i..(|
+00000010  bf ad de e1 fe 0f 05                             |.......         |</pre>
+</details>
+
+## Disassemble
+
+```python3
+from hatasm import HatAsm
+
+hatasm = HatAsm()
+code = (
+    b"\xb0\xa2\x0f\x05\xb0\xa9\xba\x67\x45\x23\x01\xbe"
+    b"\x69\x19\x12\x28\xbf\xad\xde\xe1\xfe\x0f\x05"
+)
+
+for line in hatasm.disassemble('x64', code):
+    print(line.mnemonic, line.op_str)
+```
+
+<details>
+    <summary>Result</summary><br>
+    <pre>
+mov al, 0a2h
+syscall
+mov al, 0a9h
+mov edx, 1234567h
+mov esi, 28121969h
+mov edi, 0fee1deadh
+syscall</pre>
+</details>
 
 ## HatAsm CLI
 
 HatAsm also has its own command line interface that can be invoked by executing `hatasm` command:
 
 ```
-usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT]
-              [-o OUTPUT] [-a] [-d]
+usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT] [-o OUTPUT] [-a]
+              [-d] [-f FORMAT]
 
-HatAsm is a powerful assembler and disassembler that provides
-support for all common architectures.
+HatAsm is a powerful assembler and disassembler that provides support for all common
+architectures.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --arch ARCH           Architecture to assemble or disassemble for.
   --mode MODE           Architecture mode (for example - arm/thumb).
-  --syntax SYNTAX       Assembler/Disassembler syntax (for example -
-                        intel/att).
+  --syntax SYNTAX       Assembler/Disassembler syntax (for example - intel/att).
   -i INPUT, --input INPUT
                         Input file for assembler or disassembler.
   -o OUTPUT, --output OUTPUT
                         Output file to write output.
-  -a, --assembler       Launch HatAsm assembler.
-  -d, --disassembler    Launch HatAsm disassembler.
+  -a, --assemble        Launch HatAsm assembler.
+  -d, --disassemble     Launch HatAsm disassembler.
+  -f FORMAT, --format FORMAT
+                        Output file format (e.g. elf, macho, pe).
+  
 ```
 
 ### Examples
@@ -97,24 +115,24 @@ optional arguments:
 hatasm -a --arch x64
 ```
 
-Run interactive assembler shell for `x64` architecture.
+Run interactive assembler shell for **x64** architecture.
 
 ```
-hatasm > nop
+hatasm % nop
 00000000  90                                               |.               |
-hatasm > start:
+hatasm % start:
 ........     xor rax, rax
 ........     cdq
 ........     nop
 ........     
 00000000  48 31 c0 99 90                                   |H1...           |
-hatasm >
+hatasm %
 ```
 
-Write macos execve /bin/sh shellcode from command-line.
+Write macOS **x64** execve() /bin/sh shellcode from command-line.
 
 ```
-hatasm > start:
+hatasm % start:
 ........     xor rax, rax
 ........     cdq
 ........     push rax
@@ -130,5 +148,5 @@ hatasm > start:
 ........
 00000000  48 31 c0 99 50 48 bf 2f  2f 62 69 6e 2f 73 68 57 |H1..PH.//bin/shW|
 00000010  54 5f 48 31 f6 b0 02 48  c1 c8 28 b0 3b 0f 05    |T_H1...H..(.;.. |
-hatasm > 
+hatasm %
 ```
