@@ -99,7 +99,7 @@ class ASM(Badges):
         """
 
         if arch in self.ks_arch:
-            target = self.ks_arch[arch]
+            target = list(self.ks_arch[arch])
 
             if arch == 'armle' and mode == 'thumb':
                 target[1] = KS_MODE_THUMB + KS_MODE_LITTLE_ENDIAN
@@ -193,7 +193,7 @@ class ASM(Badges):
         """
 
         if arch in self.cs_arch:
-            target = self.cs_arch[arch]
+            target = list(self.cs_arch[arch])
 
             if arch == 'armle' and mode == 'thumb':
                 target[1] = CS_MODE_THUMB + CS_MODE_LITTLE_ENDIAN
