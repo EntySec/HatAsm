@@ -80,40 +80,43 @@ class HatAsmCLI(HatAsm):
                 self.print_error(f"HatAsm: disassembler failed: unsupported architecture")
                 return
 
-        if self.args.input:
-            if self.args.asm:
-                result = self.assemble_from(self.args.arch, self.args.input,
-                                            self.args.mode, self.args.syntax)
-                if not result:
-                    return
+        if self.args.asm and self.args.input:
+            result = self.assemble_from(self.args.arch, self.args.input,
+                                        self.args.mode, self.args.syntax)
+            if not result:
+                return
 
-                if self.args.output:
-                    if self.args.format:
-                        result = self.pack_exe(result, self.args.arch,
-                                               self.args.format)
+            if self.args.output:
+                if self.args.format:
+                    result = self.pack_exe(result, self.args.arch,
+                                           self.args.format)
 
-                    with open(self.args.output, 'wb') as f:
-                        f.write(result)
-                    return
+                with open(self.args.output, 'wb') as f:
+                    f.write(result)
+                return
 
-                for line in self.hexdump(result):
-                    self.print_empty(line)
-            else:
-                result = self.disassemble_from(self.args.arch, self.args.input,
-                                               self.args.mode, self.args.syntax)
+            for line in self.hexdump(result):
+                self.print_empty(line)
 
-                if not result:
-                    return
+            return
 
-                if self.args.output:
-                    with open(self.args.output, 'w') as f:
-                        for opcode in result:
-                            f.write(f"{opcode.mnemonic}\t{opcode.op_str}\n")
-                    return
+        elif self.args.disasm and self.args.input:
+            result = self.disassemble_from(self.args.arch, self.args.input,
+                                           self.args.mode, self.args.syntax)
 
-                for line in result:
-                    self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic,
-                                                        line.op_str))
+            if not result:
+                return
+
+            if self.args.output:
+                with open(self.args.output, 'w') as f:
+                    for opcode in result:
+                        f.write(f"{opcode.mnemonic}\t{opcode.op_str}\n")
+                return
+
+            for line in result:
+                self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic,
+                                                    line.op_str))
+
             return
 
         Console(self.args.arch, self.args.mode, self.args.syntax,

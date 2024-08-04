@@ -23,6 +23,7 @@ SOFTWARE.
 """
 
 import os
+import codecs
 
 from keystone import *
 from capstone import *
