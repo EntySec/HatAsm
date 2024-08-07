@@ -42,7 +42,8 @@ class Macho(object):
     ]
 
     macho_headers = {
-        'x64': f'{os.path.dirname(os.path.dirname(__file__))}/exe/templates/macho/macho_x64.macho'
+        'x64': f'{os.path.dirname(os.path.dirname(__file__))}/exe/templates/macho/macho_x64.macho',
+        'aarch64': f'{os.path.dirname(os.path.dirname(__file__))}/exe/templates/macho/macho_aarch64.macho'
     }
 
     @staticmethod
