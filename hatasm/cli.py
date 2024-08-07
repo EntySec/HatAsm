@@ -132,5 +132,5 @@ def main() -> None:
     try:
         cli = HatAsmCLI()
         cli.start()
-    except BaseException:
-        pass
+    except BaseException as e:
+        print(e)
