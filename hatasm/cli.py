@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import os
+import stat
 import argparse
 
 from .__main__ import HatAsm
@@ -93,6 +95,11 @@ class HatAsmCLI(HatAsm):
 
                 with open(self.args.output, 'wb') as f:
                     f.write(result)
+
+                st = os.stat(self.args.output)
+                if self.args.format:
+                    os.chmod(self.args.output, st.st_mode | stat.S_IEXEC)
+
                 return
 
             for line in self.hexdump(result):
