@@ -87,25 +87,28 @@ syscall</pre>
 HatAsm also has its own command line interface that can be invoked by executing `hatasm` command:
 
 ```
-usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT] [-o OUTPUT] [-a]
-              [-d] [-f FORMAT]
+usage: hatasm [-h] [--arch ARCH] [--mode MODE] [--syntax SYNTAX] [-i INPUT]
+              [-o OUTPUT] [-a] [-d] [-e] [-f FORMAT] [--formats]
 
-HatAsm is a powerful assembler and disassembler that provides support for all common
-architectures.
+HatAsm is a powerful assembler and disassembler that provides support for all
+common architectures.
 
 options:
   -h, --help            show this help message and exit
   --arch ARCH           Architecture to assemble or disassemble for.
   --mode MODE           Architecture mode (for example - arm/thumb).
-  --syntax SYNTAX       Assembler/Disassembler syntax (for example - intel/att).
+  --syntax SYNTAX       Assembler/Disassembler syntax (for example -
+                        intel/att).
   -i INPUT, --input INPUT
                         Input file for assembler or disassembler.
   -o OUTPUT, --output OUTPUT
                         Output file to write output.
   -a, --assemble        Launch HatAsm assembler.
   -d, --disassemble     Launch HatAsm disassembler.
+  -e, --emulate         Emulate assembled code (use with -a).
   -f FORMAT, --format FORMAT
                         Output file format (e.g. elf, macho, pe).
+  --formats             Display all available formats.
   
 ```
 
