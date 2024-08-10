@@ -20,6 +20,7 @@ class HatAsmFormat(Format):
 
     def __init__(self) -> None:
         super().__init__({
+            'Format': 'dylib',
             'Name': 'Mach-O iOS/macOS Dynamic Library Format',
             'Description': (
                 'Pack machine code into a dylib file.'

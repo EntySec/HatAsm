@@ -40,6 +40,7 @@ class HatAsmFormat(Format):
 
     def __init__(self) -> None:
         super().__init__({
+            'Format': 'dll',
             'Name': 'Dynamic Link Library Format',
             'Description': (
                 'Pack machine code into a DLL file.'

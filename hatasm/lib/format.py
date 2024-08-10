@@ -43,10 +43,11 @@ class Format(object):
                          '/exe/templates/'
 
         self.info = {
+            'Format': "",
             'Name': "",
             'Description': "",
-            'Arch': '',
-            'Platform': ''
+            'Arch': [],
+            'Platform': ""
         }
         self.info.update(info)
 

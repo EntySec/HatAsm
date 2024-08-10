@@ -20,6 +20,7 @@ class HatAsmFormat(Format):
 
     def __init__(self) -> None:
         super().__init__({
+            'Format': 'macho',
             'Name': 'Mach-O iOS/macOS Executable Format',
             'Description': (
                 'Pack machine code into a Mach-O file.'

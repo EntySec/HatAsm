@@ -67,6 +67,7 @@ class HatAsmFormat(Format):
 
     def __init__(self) -> None:
         super().__init__({
+            'Format': 'pe',
             'Name': 'Portable Executable Format',
             'Description': (
                 'Pack machine code into a PE format.'

@@ -70,6 +70,7 @@ class HatAsmFormat(Format):
 
     def __init__(self) -> None:
         super().__init__({
+            'Format': 'elf',
             'Name': 'Executable and Linkable Format',
             'Description': (
                 'Pack machine code into an ELF file.'

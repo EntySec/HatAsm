@@ -26,11 +26,13 @@ import os
 import stat
 import argparse
 
+from badges import Tables
+
 from .__main__ import HatAsm
 from .console import Console
 
 
-class HatAsmCLI(HatAsm):
+class HatAsmCLI(HatAsm, Tables):
     """ Subclass of hatasm module.
 
     This subclass of hatasm module is intended for providing
@@ -54,6 +56,7 @@ class HatAsmCLI(HatAsm):
     parser.add_argument('-e', '--emulate', action='store_true', dest='emu',
                         help='Emulate assembled code (use with -a).')
     parser.add_argument('-f', '--format', dest='format', help='Output file format (e.g. elf, macho, pe).')
+    parser.add_argument('--formats', dest='formats', action='store_true', help='Display all available formats.')
     args = parser.parse_args()
 
     def start(self) -> None:
@@ -61,6 +64,18 @@ class HatAsmCLI(HatAsm):
 
         :return None: None
         """
+
+        if self.args.formats:
+            data = []
+
+            for format in self.get_format():
+                data.append((
+                    format.info['Format'], format.info['Name'],
+                    format.info['Platform']
+                ))
+
+            self.print_table('Output Formats', ('Format', 'Name', 'Platform'), *data)
+            return
 
         if not self.args.syntax:
             self.args.syntax = 'intel'

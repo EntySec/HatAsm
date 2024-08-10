@@ -25,7 +25,7 @@ SOFTWARE.
 import os
 import importlib.util
 
-from typing import Optional
+from typing import Optional, Union
 
 from hatasm.lib.format import Format
 
@@ -63,16 +63,27 @@ class Formats(object):
 
         return format_object
 
-    def get_format(self, name: str, arch: Optional[str] = None,
-                   platform: Optional[str] = None) -> Format:
+    def get_format(self, name: Optional[str] = None, arch: Optional[str] = None,
+                   platform: Optional[str] = None) -> Union[Format, list]:
         """ Get format by name, arch and platform.
 
-        :param str name: format name
+        :param Optional[str] name: format name
         :param Optional[str] arch: architecture
         :param Optional[str] platform: platform
         :return Format: format object
         :raises RuntimeError: with trailing error message
         """
+
+        if not name:
+            formats = []
+
+            for file in os.listdir(self.formats):
+                if not file.endswith('.py') or file == '__init__.py':
+                    continue
+
+                formats.append(self.import_format(self.formats + file))
+
+            return formats
 
         path = self.formats + name + '.py'
 
