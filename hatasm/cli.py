@@ -53,8 +53,8 @@ class HatAsmCLI(HatAsm, Tables):
     parser.add_argument('-a', '--assemble', action='store_true', dest='asm', help='Launch HatAsm assembler.')
     parser.add_argument('-d', '--disassemble', action='store_true', dest='disasm',
                         help='Launch HatAsm disassembler.')
-    parser.add_argument('-e', '--emulate', action='store_true', dest='emu',
-                        help='Emulate assembled code (use with -a).')
+    parser.add_argument('-e', '--emulate', action='store_true', dest='emulate',
+                        help='Emulate assembled code in CLI.')
     parser.add_argument('-f', '--format', dest='format', help='Output file format (e.g. elf, macho, pe).')
     parser.add_argument('--formats', dest='formats', action='store_true', help='Display all available formats.')
     args = parser.parse_args()
@@ -142,7 +142,7 @@ class HatAsmCLI(HatAsm, Tables):
             return
 
         Console(self.args.arch, self.args.mode, self.args.syntax,
-                asm=self.args.asm).shell()
+                asm=self.args.asm, emulate=self.args.emulate).shell()
 
 
 def main() -> None:

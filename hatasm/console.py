@@ -25,8 +25,10 @@ SOFTWARE.
 import codecs
 
 from .asm import ASM
+from .emu import Emu
 
 from badges.cmd import Cmd
+from colorscript import ColorScript
 
 
 class Console(Cmd, ASM):
@@ -39,7 +41,8 @@ class Console(Cmd, ASM):
     def __init__(self, arch: str, mode: str = '',
                  syntax: str = 'intel',
                  prompt: str = '%linehatasm%end % ',
-                 asm: bool = True) -> None:
+                 asm: bool = True,
+                 emulate: bool = True) -> None:
         """ Initialize assembler/disassembler console.
 
         :param str arch: architecture
@@ -47,6 +50,7 @@ class Console(Cmd, ASM):
         :param str syntax: assembler syntax
         :param str prompt: prompt message to display
         :param bool asm: mode (assemble/disassemble)
+        :param bool emulate: True to emulate else False
         :return None: None
         """
 
@@ -62,6 +66,11 @@ class Console(Cmd, ASM):
         self.asm = asm
         self.cached = ""
 
+        if emulate:
+            self.emu = Emu(arch)
+        else:
+            self.emu = None
+
     def emptyline(self) -> None:
         """ Complete cached code.
 
@@ -76,6 +85,9 @@ class Console(Cmd, ASM):
         try:
             result = self.assemble(
                 self.arch, self.cached, self.mode, self.syntax)
+
+            if self.emu:
+                self.emu.emulate(result)
 
             for line in self.hexdump(result):
                 self.print_empty(line)
@@ -108,8 +120,12 @@ class Console(Cmd, ASM):
 
         if not self.asm:
             code = codecs.escape_decode(code)[0]
+            print(code)
             result = self.disassemble(
                 self.arch, code, self.mode, self.syntax)
+
+            if self.emu:
+                self.emu.emulate(code)
 
             for line in result:
                 self.print_empty("0x%x:\t%s\t%s" % (line.address, line.mnemonic, line.op_str))
@@ -121,13 +137,15 @@ class Console(Cmd, ASM):
             return
 
         if code.endswith(':'):
-            self.set_prompt('........     ')
+            self.set_prompt('.' * len(ColorScript().strip(self.scheme)) + ' ' * 4)
             self.cached += code + '\n'
 
             return
 
         result = self.assemble(
             self.arch, code, self.mode, self.syntax)
+        if self.emu:
+            self.emu.emulate(result)
 
         for line in self.hexdump(result):
             self.print_empty(line)

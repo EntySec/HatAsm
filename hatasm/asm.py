@@ -31,6 +31,8 @@ from capstone import *
 from typing import Union
 from badges import Badges
 
+from hatasm.preprocessor import Preprocessor
+
 
 class ASM(Badges):
     """ Subclass of hatasm module.
@@ -115,7 +117,8 @@ class ASM(Badges):
                 except BaseException:
                     ks = Ks(*target)
 
-            machine = ks.asm(code.encode())
+            machine = ks.asm(
+                Preprocessor(arch).preprocess(code).encode())
 
             if machine:
                 return bytes(machine[0])
